@@ -6,7 +6,7 @@
 #    By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/15 15:24:55 by jrivoire          #+#    #+#              #
-#    Updated: 2021/04/01 16:20:59 by jrivoire         ###   ########.fr        #
+#    Updated: 2021/04/06 17:46:04 by jrivoire         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRCS			= 	char/ft_isalnum.c \
 					char/ft_isascii.c \
 					char/ft_isdigit.c \
 					char/ft_isprint.c \
+					char/ft_isspace.c \
 					char/ft_tolower.c \
 					char/ft_toupper.c \
 					display/ft_putchar_fd.c \
