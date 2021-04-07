@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 16:55:11 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/07 15:41:41 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/07 16:55:25 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,18 @@ static void	skip_space(char **line)
 		(*line)++;
 }
 
-static void	fill_des(char ***dest, int index, char *str)
+static int	fill_des(char ***dest, int index, char *str)
 {
-	*(dest[index]) = ft_strdup(str);
+	char *new;
+	int ret;
+
+	ret = 0;
+	new = ft_strdup(str);
+	if (!new)
+		ret = 1;
+	*(dest[index]) = new;
 	free(dest);
+	return (ret);
 }
 
 static char ***build_dest(t_des *description)
@@ -29,6 +37,8 @@ static char ***build_dest(t_des *description)
 	char ***dest;
 
 	dest = malloc(sizeof(char*) * 5);
+	if (!dest)
+		return (NULL);
 	dest[0] = &(description->no_path);
 	dest[1] = &(description->ea_path);
 	dest[2] = &(description->so_path);
@@ -44,6 +54,8 @@ int	texture_parser(char **line, t_des *description)
 	char identifiers[5][3] = {"NO", "EA", "SO", "WE", "S"};
 
 	dest = build_dest(description);
+	if (!dest)
+		return (1);
 	index = -1;
 	skip_space(line);
 	while (++index < 5)
@@ -60,6 +72,5 @@ int	texture_parser(char **line, t_des *description)
 		fill_des(dest, index, "|duplicate|");
 		return (1);
 	}
-	fill_des(dest, index, *line);
-	return (0);
+	return (fill_des(dest, index, *line));
 }
