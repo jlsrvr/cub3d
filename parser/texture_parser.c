@@ -12,12 +12,6 @@
 
 #include "parser.h"
 
-static void	skip_space(char **line)
-{
-	while (ft_isspace(**line))
-		(*line)++;
-}
-
 static int	fill_des(char ***dest, int index, char *str)
 {
 	char *new;
