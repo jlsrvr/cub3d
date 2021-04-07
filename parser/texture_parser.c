@@ -6,43 +6,60 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 16:55:11 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/07 14:20:01 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/07 15:41:41 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-int texture_parser(char **line, t_des *description)
+static void	skip_space(char **line)
 {
-	char **to_fill;
-
-	if (ft_strnstr(*line, "NO", 2))
-	{
-		(*line) += 2;
-		to_fill = &(description->no_path);
-	}
-	else if (ft_strnstr(*line, "EA", 2))
-	{
-		(*line) += 2;
-		to_fill = &(description->ea_path);
-	}
-	else if (ft_strnstr(*line, "SO", 2))
-	{
-		(*line) += 2;
-		to_fill = &(description->so_path);
-	}
-	else if (ft_strnstr(*line, "WE", 2))
-	{
-		(*line) += 2;
-		to_fill = &(description->we_path);
-	}
-	else if (ft_strnstr(*line, "S", 2))
-	{
-		(*line) += 2;
-		to_fill = &(description->s_path);
-	}
 	while (ft_isspace(**line))
 		(*line)++;
-	*to_fill = ft_strdup(*line);
+}
+
+static void	fill_des(char ***dest, int index, char *str)
+{
+	*(dest[index]) = ft_strdup(str);
+	free(dest);
+}
+
+static char ***build_dest(t_des *description)
+{
+	char ***dest;
+
+	dest = malloc(sizeof(char*) * 5);
+	dest[0] = &(description->no_path);
+	dest[1] = &(description->ea_path);
+	dest[2] = &(description->so_path);
+	dest[3] = &(description->we_path);
+	dest[4] = &(description->s_path);
+	return (dest);
+}
+
+int	texture_parser(char **line, t_des *description)
+{
+	int index;
+	char ***dest;
+	char identifiers[5][3] = {"NO", "EA", "SO", "WE", "S"};
+
+	dest = build_dest(description);
+	index = -1;
+	skip_space(line);
+	while (++index < 5)
+	{
+		if (ft_strnstr(*line, identifiers[index], 2))
+			break ;
+	}
+	(*line)++;
+	if (index != 4)
+		(*line)++;
+	skip_space(line);
+	if (*(dest[index]))
+	{
+		fill_des(dest, index, "|duplicate|");
+		return (1);
+	}
+	fill_des(dest, index, *line);
 	return (0);
 }
