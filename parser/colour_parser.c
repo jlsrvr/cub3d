@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 15:58:41 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/08 11:28:51 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/08 15:52:44 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int			colour_parser(char **line, t_des *description)
 			break ;
 	(*line)++;
 	numbers = ft_split(*line, ',');
-	if (count_words(numbers) == 3)
+	if (count_words(numbers) == 3 && *(dest[index]) == -2)
 		*(dest[index]) = hex_conversion(numbers);
 	else
 		*(dest[index]) = -1;
