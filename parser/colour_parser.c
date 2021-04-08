@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 15:58:41 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/08 11:01:54 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/08 11:20:51 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,39 +22,6 @@ static int **build_dest(t_des *description)
 	dest[0] = &(description->floor_c);
 	dest[1] = &(description->ceiling_c);
 	return (dest);
-}
-
-static int	count_words(char **words)
-{
-	int count;
-
-	count = 0;
-	while(words[count])
-		count++;
-	return (count);
-}
-
-static int	parse_number(char *number)
-{
-	int num;
-	int digit;
-
-	num = 0;
-	digit = 0;
-	while (number[num])
-	{
-		if (!ft_isspace(number[num]) && !ft_isdigit(number[num]))
-			return (-1);
-		if (ft_isdigit(number[num]))
-			digit = 1;
-		if (ft_isspace(number[num]) && digit == 1)
-			return (-1);
-		num++;
-	}
-	num = ft_atoi(number);
-	if (!digit)
-		return (-1);
-	return (num);
 }
 
 static int	hex_conversion(char **numbers)
