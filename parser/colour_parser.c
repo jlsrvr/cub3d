@@ -44,6 +44,23 @@ static int	hex_conversion(char **numbers)
     return (hex);
 }
 
+static int clean_return(int **dest, int index, char **numbers)
+{
+	int num_index;
+
+	num_index = -1;
+	while (numbers[++num_index])
+		free(numbers[num_index]);
+	free(numbers);
+	if (*(dest[index]) == -1)
+	{
+		free(dest);
+		return (1);
+	}
+	free(dest);
+	return (0);
+}
+
 int	colour_parser(char **line, t_des *description)
 {
 	int index;
@@ -57,21 +74,13 @@ int	colour_parser(char **line, t_des *description)
 		return (1);
 	index = -1;
 	while (++index < 2)
-	{
 		if (!ft_strncmp(*line, &identifiers[index], 1))
 			break ;
-	}
 	(*line)++;
 	numbers = ft_split(*line, ',');
 	if (count_words(numbers) == 3)
 		*(dest[index]) = hex_conversion(numbers);
 	else
 		*(dest[index]) = -1;
-	if (*(dest[index]) == -1)
-	{
-		free(dest);
-		return (1);
-	}
-	free(dest);
-	return (0);
+	return (clean_return(dest, index, numbers));
 }
