@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 12:50:02 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/08 17:19:01 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/08 18:03:06 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,5 @@ typedef struct s_description
 	char **map;
 }	t_des;
 
-int	cub_parser(int fd, t_des *to_fill);
+int	cub_parser(int fd, t_des **to_fill);
 #endif
