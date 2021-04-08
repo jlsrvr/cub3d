@@ -6,69 +6,78 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 15:58:41 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/08 12:29:38 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/08 15:28:28 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static int	hex_conversion(char **numbers)
-{
-	int index;
-	int rgb[3];
-	int hex;
-
-	rgb[0] = 0;
-	rgb[1] = 0;
-	rgb[2] = 0;
-	hex = 0;
-	index = -1;
-	while (++index < 3 && numbers[index])
-	{
-		rgb[index] = parse_number(numbers[index]);
-		if (rgb[index] < 0 || rgb[index] > 255)
-			return (-1);
-	}
-	hex |= rgb[2];
-	hex |= rgb[1] << 8;
-	hex |= rgb[0] << 16;
-	return (hex);
-}
-
-static int	clean_return(int index, char **numbers)
+static int	clean_return(t_des *des, char **numbers, int x_res, int y_res)
 {
 	int num_index;
+	int ret;
 
-	num_index = -1;
-	while (numbers[++num_index])
-		free(numbers[num_index]);
-	free(numbers);
-	if (*(dest[index]) == -1)
+	ret = 0;
+	des->x_res = x_res;
+	des->y_res = y_res;
+	if (x_res == -1 || y_res == -1)
+		ret = 1;
+	if (numbers)
 	{
-		free(dest);
-		return (1);
+		num_index = -1;
+		while (numbers[++num_index])
+			free(numbers[num_index]);
+		free(numbers);
 	}
+	return (ret);
+}
+
+static int	check_split(char **numbers, int *first_index, int *last_index)
+{
+	int num_i;
+	int let_i;
+	int num_cnt;
+
+	num_i = -1;
+	num_cnt = 0;
+	while (numbers[++num_i] && num_cnt < 3)
+	{
+		let_i = -1;
+		while (numbers[num_i][++let_i])
+		{
+			if (ft_isdigit(numbers[num_i][let_i]))
+			{
+				if (num_cnt++ == 0)
+					*first_index = num_i;
+				*last_index = num_i;
+				break ;
+			}
+			if (!ft_isspace(numbers[num_i][let_i]))
+				return (1);
+		}
+	}
+	if (num_cnt > 2 || numbers[(*last_index) + 1])
+		return (1);
 	return (0);
 }
 
 int			resolution_parser(char **line, t_des *description)
 {
-	int		index;
-	int		**dest;
+	int		first_int;
+	int		sec_int;
 	char	**numbers;
-	char	*identifiers;
 
-	if (!dest)
-		return (1);
-	index = -1;
-	while (++index < 2)
-		if (!ft_strncmp(*line, &identifiers[index], 1))
-			break ;
+	if (description->x_res != 0 || description->y_res != 0)
+		return (clean_return(description, NULL, -1, -1));
 	(*line)++;
-	numbers = ft_split(*line, ',');
-	if (count_words(numbers) == 3)
-		*(dest[index]) = hex_conversion(numbers);
-	else
-		*(dest[index]) = -1;
-	return (clean_return(dest, index, numbers));
+	first_int = 0;
+	sec_int = 0;
+	numbers = ft_split(*line, ' ');
+	if (check_split(numbers, &first_int, &sec_int))
+		return (clean_return(description, numbers, -1, -1));
+	first_int = parse_number(numbers[first_int]);
+	sec_int = parse_number(numbers[sec_int]);
+	if (first_int <= 0 || sec_int <= 0)
+		return (clean_return(description, numbers, -1, -1));
+	return (clean_return(description, numbers, first_int, sec_int));
 }
