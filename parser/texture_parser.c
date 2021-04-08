@@ -6,19 +6,25 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 16:55:11 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/07 16:55:25 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/08 11:59:12 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static int	fill_des(char ***dest, int index, char *str)
+static int	clean_return(char ***dest, int index, char **line)
 {
-	char *new;
-	int ret;
+	int		ret;
+	char	*new;
 
 	ret = 0;
-	new = ft_strdup(str);
+	if (*(dest[index]))
+	{
+		ret = 1;
+		new = ft_strdup("|duplicate|");
+	}
+	else
+		new = ft_strdup(*line);
 	if (!new)
 		ret = 1;
 	*(dest[index]) = new;
@@ -26,7 +32,7 @@ static int	fill_des(char ***dest, int index, char *str)
 	return (ret);
 }
 
-static char ***build_dest(t_des *description)
+static char	***build_dest(t_des *description)
 {
 	char ***dest;
 
@@ -41,17 +47,21 @@ static char ***build_dest(t_des *description)
 	return (dest);
 }
 
-int	texture_parser(char **line, t_des *description)
+int			texture_parser(char **line, t_des *description)
 {
-	int index;
-	char ***dest;
-	char identifiers[5][3] = {"NO", "EA", "SO", "WE", "S"};
+	int		index;
+	char	***dest;
+	char	*identifiers[5];
 
+	identifiers[0] = "NO";
+	identifiers[1] = "EA";
+	identifiers[2] = "SO";
+	identifiers[3] = "WE";
+	identifiers[4] = "S";
 	dest = build_dest(description);
 	if (!dest)
 		return (1);
 	index = -1;
-	skip_space(line);
 	while (++index < 5)
 	{
 		if (ft_strnstr(*line, identifiers[index], 2))
@@ -61,10 +71,5 @@ int	texture_parser(char **line, t_des *description)
 	if (index != 4)
 		(*line)++;
 	skip_space(line);
-	if (*(dest[index]))
-	{
-		fill_des(dest, index, "|duplicate|");
-		return (1);
-	}
-	return (fill_des(dest, index, *line));
+	return (clean_return(dest, index, line));
 }
