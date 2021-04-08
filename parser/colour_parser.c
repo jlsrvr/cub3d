@@ -6,13 +6,13 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 15:58:41 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/08 11:20:51 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/08 11:28:51 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static int **build_dest(t_des *description)
+static int	**build_dest(t_des *description)
 {
 	int **dest;
 
@@ -27,9 +27,12 @@ static int **build_dest(t_des *description)
 static int	hex_conversion(char **numbers)
 {
 	int index;
-	int rgb[3] = {0, 0, 0};
+	int rgb[3];
 	int hex;
 
+	rgb[0] = 0;
+	rgb[1] = 0;
+	rgb[2] = 0;
 	hex = 0;
 	index = -1;
 	while (++index < 3 && numbers[index])
@@ -39,12 +42,12 @@ static int	hex_conversion(char **numbers)
 			return (-1);
 	}
 	hex |= rgb[2];
-    hex |= rgb[1] << 8;
-    hex |= rgb[0] << 16;
-    return (hex);
+	hex |= rgb[1] << 8;
+	hex |= rgb[0] << 16;
+	return (hex);
 }
 
-static int clean_return(int **dest, int index, char **numbers)
+static int	clean_return(int **dest, int index, char **numbers)
 {
 	int num_index;
 
@@ -61,12 +64,12 @@ static int clean_return(int **dest, int index, char **numbers)
 	return (0);
 }
 
-int	colour_parser(char **line, t_des *description)
+int			colour_parser(char **line, t_des *description)
 {
-	int index;
-	int **dest;
-	char **numbers;
-	char *identifiers;
+	int		index;
+	int		**dest;
+	char	**numbers;
+	char	*identifiers;
 
 	identifiers = "FC";
 	dest = build_dest(description);
