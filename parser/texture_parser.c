@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 16:55:11 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/08 11:59:12 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/08 23:03:38 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static int	clean_return(char ***dest, int index, char **line)
 	if (*(dest[index]))
 	{
 		ret = 1;
+		free(*(dest[index]));
 		new = ft_strdup("|duplicate|");
 	}
 	else
