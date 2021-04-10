@@ -6,14 +6,12 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:18:16 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/10 17:55:30 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/10 19:47:17 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include <stdio.h>
-
-//0, 1, 2, and one of the following N, E, S or W
 
 static int ft_not_allowed(char c, int *orientation)
 {
@@ -27,6 +25,28 @@ static int ft_not_allowed(char c, int *orientation)
 	return (1);
 }
 
+static int	add_line(char ***map, char *line)
+{
+	int size;
+	int index;
+	char *new_line;
+	char **new_map;
+
+	size = count_words(*map);
+	new_map = malloc(sizeof(*new_map) * (size + 2));
+	index = -1;
+	while (++index < size)
+		new_map[index] = (*map)[index];
+	new_line = ft_strdup(line);
+	if (!new_line)
+		return (1);
+	new_map[index++] = new_line;
+	new_map[index] = NULL;
+	free(*map);
+	*map = new_map;
+	return (0);
+}
+
 int map_parser(char **line, t_des *description)
 {
 	char **new;
@@ -35,10 +55,21 @@ int map_parser(char **line, t_des *description)
 
 	index = 0;
 	orientation = 0;
+	if (ft_strlen(*line) < 1)
+		return (1);
 	while ((*line)[index])
 		if (ft_not_allowed((*line)[index++], &orientation))
 			return (1);
-	new = ft_split(*line, 'e');
-	description->map = new;
-	return (0);
+	if (!description->map)
+	{
+		new = ft_split(*line, 'e');
+		if (!new)
+			return (1);
+		description->map = new;
+		return (0);
+	}
+	index = 0;
+	while (description->map[index])
+		index++;
+	return (add_line(&(description->map), *line));
 }
