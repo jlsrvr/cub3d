@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 12:35:09 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/08 13:03:56 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/10 16:20:49 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int		parse_number(char *number);
 
 
 int		colour_parser(char **line, t_des *description);
+int		map_parser(char **line, t_des *description);
 int		texture_parser(char **line, t_des *description);
 int		resolution_parser(char **line, t_des *description);
 #endif
