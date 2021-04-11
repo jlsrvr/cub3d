@@ -6,12 +6,11 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 17:19:16 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/09 15:10:19 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/11 15:33:30 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-#include <stdio.h>
 
 static void	init_description(t_des *to_fill)
 {
