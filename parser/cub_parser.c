@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 17:19:16 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/11 15:33:30 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/12 10:07:31 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,41 +26,35 @@ static void	init_description(t_des *to_fill)
 	to_fill->map = NULL;
 }
 
-static int	clean_fill(int result, int *cnt_elems, char **to_free)
+static int	clean_fill(int result, int *cnt_elems)
 {
 	if (result)
-	{
-		free(*to_free);
 		return (1);
-	}
 	(*cnt_elems)++;
 	return (0);
 }
 
 static int	dispatch_line(char **line, t_des *to_fill, int *cnt_elems)
 {
-	char *to_free;
 	char *identifiers;
 	char *type;
 
 	identifiers = "RNOEASOWESFC";
-	to_free = *line;
 	type = ft_strchr(identifiers, (*line)[0]);
 	if (!type && *line)
 	{
-		free(to_free);
+		free(*line);
 		return (1);
 	}
 	if (&identifiers[0] == type)
-		if (clean_fill(resolution_parser(line, to_fill), cnt_elems, &to_free))
+		if (clean_fill(resolution_parser(line, to_fill), cnt_elems))
 			return (1);
 	if (type < &identifiers[10] && type > &identifiers[0])
-		if (clean_fill(texture_parser(line, to_fill), cnt_elems, &to_free))
+		if (clean_fill(texture_parser(line, to_fill), cnt_elems))
 			return (1);
 	if (type == &identifiers[10] || type == &identifiers[11])
-		if (clean_fill(colour_parser(line, to_fill), cnt_elems, &to_free))
+		if (clean_fill(colour_parser(line, to_fill), cnt_elems))
 			return (1);
-	free(to_free);
 	return (0);
 }
 
@@ -68,6 +62,7 @@ int			cub_parser(int fd, t_des **to_fill)
 {
 	int		cnt_elems;
 	char	*line;
+	char	*to_free;
 
 	*to_fill = malloc(sizeof(**to_fill));
 	if (!*to_fill)
@@ -76,6 +71,7 @@ int			cub_parser(int fd, t_des **to_fill)
 	cnt_elems = 0;
 	while (get_next_line(fd, &line) == 1)
 	{
+		to_free = line;
 		if (cnt_elems < 8)
 		{
 			if (dispatch_line(&line, *to_fill, &cnt_elems))
@@ -86,6 +82,7 @@ int			cub_parser(int fd, t_des **to_fill)
 			if (map_parser(&line, *to_fill))
 				return (1);
 		}
+		free(to_free);
 	}
 	free(line);
 	return (0);
