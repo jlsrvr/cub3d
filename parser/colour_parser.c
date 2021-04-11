@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 15:58:41 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/08 15:52:44 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/11 17:00:16 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,19 @@ static int	clean_return(int **dest, int index, char **numbers)
 	return (0);
 }
 
+static int	check_line(char *line)
+{
+	int index;
+	int commas;
+
+	index = -1;
+	commas = 0;
+	while (line[++index])
+		if (line[index] == ',')
+			commas++;
+	return (commas - 2);
+}
+
 int			colour_parser(char **line, t_des *description)
 {
 	int		index;
@@ -81,7 +94,7 @@ int			colour_parser(char **line, t_des *description)
 			break ;
 	(*line)++;
 	numbers = ft_split(*line, ',');
-	if (count_words(numbers) == 3 && *(dest[index]) == -2)
+	if (count_words(numbers) == 3 && *(dest[index]) == -2 && !check_line(*line))
 		*(dest[index]) = hex_conversion(numbers);
 	else
 		*(dest[index]) = -1;
