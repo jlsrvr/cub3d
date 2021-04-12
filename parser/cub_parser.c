@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 17:19:16 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/12 12:10:32 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/12 12:38:02 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ static int	check_line(char *line, t_des *to_fill)
 
 int			cub_parser(int fd, t_des **to_fill)
 {
+	int		gnl;
 	int		cnt_elems;
 	int		line_check;
 	char	*line;
@@ -92,7 +93,8 @@ int			cub_parser(int fd, t_des **to_fill)
 		return (1);
 	init_description(*to_fill);
 	cnt_elems = 0;
-	while (get_next_line(fd, &line) == 1)
+	gnl = get_next_line(fd, &line);
+	while (gnl == 1 || line)
 	{
 		to_free = line;
 		if (cnt_elems < 8)
@@ -116,7 +118,7 @@ int			cub_parser(int fd, t_des **to_fill)
 			}
 		}
 		free(to_free);
+		gnl = get_next_line(fd, &line);
 	}
-	free(line);
 	return (0);
 }
