@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 16:55:11 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/08 23:03:38 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/12 15:13:42 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ static int	clean_return(char ***dest, int index, char **line)
 	char	*new;
 
 	ret = 0;
+	if (index == 5)
+	{
+		free(dest);
+		return (1);
+	}
 	if (*(dest[index]))
 	{
 		ret = 1;
