@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 16:50:52 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/08 11:29:41 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/12 12:43:10 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,18 @@ int		parse_number(char *number)
 	if (!digit)
 		return (-1);
 	return (num);
+}
+
+void	init_description(t_des *to_fill)
+{
+	to_fill->x_res = 0;
+	to_fill->y_res = 0;
+	to_fill->no_path = NULL;
+	to_fill->ea_path = NULL;
+	to_fill->so_path = NULL;
+	to_fill->we_path = NULL;
+	to_fill->s_path = NULL;
+	to_fill->floor_c = -2;
+	to_fill->ceiling_c = -2;
+	to_fill->map = NULL;
 }

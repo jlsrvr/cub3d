@@ -6,25 +6,11 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 17:19:16 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/12 12:38:02 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/12 15:19:23 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-static void	init_description(t_des *to_fill)
-{
-	to_fill->x_res = 0;
-	to_fill->y_res = 0;
-	to_fill->no_path = NULL;
-	to_fill->ea_path = NULL;
-	to_fill->so_path = NULL;
-	to_fill->we_path = NULL;
-	to_fill->s_path = NULL;
-	to_fill->floor_c = -2;
-	to_fill->ceiling_c = -2;
-	to_fill->map = NULL;
-}
 
 static int	clean_fill(int result, int *cnt_elems, char *to_free)
 {
@@ -37,7 +23,7 @@ static int	clean_fill(int result, int *cnt_elems, char *to_free)
 	return (0);
 }
 
-static int	dispatch_line(char **line, t_des *to_fill, int *cnt_elems)
+static int	dispatch_element(char **line, t_des *to_fill, int *cnt_elems)
 {
 	char *identifiers;
 	char *to_free;
@@ -60,6 +46,7 @@ static int	dispatch_line(char **line, t_des *to_fill, int *cnt_elems)
 	if (type == &identifiers[10] || type == &identifiers[11])
 		if (clean_fill(colour_parser(line, to_fill), cnt_elems, to_free))
 			return (1);
+	free(to_free);
 	return (0);
 }
 
@@ -80,13 +67,34 @@ static int	check_line(char *line, t_des *to_fill)
 	return (0);
 }
 
+static int	dispatch_map(char *line, t_des **to_fill)
+{
+	int		line_check;
+	char	*to_free;
+
+	to_free = line;
+	line_check = check_line(line, *to_fill);
+	if (!line_check)
+		if (map_parser(&line, *to_fill))
+		{
+			free(to_free);
+			return (1);
+		}
+	if (line_check == 1)
+	{
+		free(to_free);
+		return (0);
+	}
+	free(to_free);
+	return (-1);
+}
+
 int			cub_parser(int fd, t_des **to_fill)
 {
+	int		temp;
 	int		gnl;
 	int		cnt_elems;
-	int		line_check;
 	char	*line;
-	char	*to_free;
 
 	*to_fill = malloc(sizeof(**to_fill));
 	if (!*to_fill)
@@ -94,31 +102,18 @@ int			cub_parser(int fd, t_des **to_fill)
 	init_description(*to_fill);
 	cnt_elems = 0;
 	gnl = get_next_line(fd, &line);
-	while (gnl == 1 || line)
+	while ((gnl == 1 || line) && cnt_elems < 8)
 	{
-		to_free = line;
-		if (cnt_elems < 8)
-		{
-			if (dispatch_line(&line, *to_fill, &cnt_elems))
-				return (1);
-		}
-		else
-		{
-			line_check = check_line(line, *to_fill);
-			if (!line_check)
-				if (map_parser(&line, *to_fill))
-				{
-					free(to_free);
-					return (1);
-				}
-			if (line_check == 1)
-			{
-				free(to_free);
-				return (0);
-			}
-		}
-		free(to_free);
+		if (dispatch_element(&line, *to_fill, &cnt_elems))
+			return (1);
 		gnl = get_next_line(fd, &line);
 	}
-	return (0);
+	while (gnl == 1 || line)
+	{
+		temp = dispatch_map(line, to_fill);
+		if (temp != -1)
+			return (temp);
+		gnl = get_next_line(fd, &line);
+	}
+	return (gnl * -1);
 }
