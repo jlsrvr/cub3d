@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 17:19:16 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/12 10:48:47 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/12 12:10:32 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,13 @@ static int	clean_fill(int result, int *cnt_elems, char *to_free)
 	return (0);
 }
 
-static int	dispatch_line(char **line, t_des *to_fill, int *cnt_elems, char *to_free)
+static int	dispatch_line(char **line, t_des *to_fill, int *cnt_elems)
 {
 	char *identifiers;
+	char *to_free;
 	char *type;
 
+	to_free = *line;
 	identifiers = "RNOEASOWESFC";
 	type = ft_strchr(identifiers, (*line)[0]);
 	if (!type && *line)
@@ -61,9 +63,27 @@ static int	dispatch_line(char **line, t_des *to_fill, int *cnt_elems, char *to_f
 	return (0);
 }
 
+static int	check_line(char *line, t_des *to_fill)
+{
+	int index;
+	int filled;
+
+	index = -1;
+	filled = 0;
+	while (line[++index])
+		if (ft_isalnum(line[index]))
+			filled = 1;
+	if (to_fill->map && filled == 0)
+		return (1);
+	if (filled == 0)
+		return (2);
+	return (0);
+}
+
 int			cub_parser(int fd, t_des **to_fill)
 {
 	int		cnt_elems;
+	int		line_check;
 	char	*line;
 	char	*to_free;
 
@@ -77,15 +97,22 @@ int			cub_parser(int fd, t_des **to_fill)
 		to_free = line;
 		if (cnt_elems < 8)
 		{
-			if (dispatch_line(&line, *to_fill, &cnt_elems, to_free))
+			if (dispatch_line(&line, *to_fill, &cnt_elems))
 				return (1);
 		}
 		else
 		{
-			if (map_parser(&line, *to_fill))
+			line_check = check_line(line, *to_fill);
+			if (!line_check)
+				if (map_parser(&line, *to_fill))
+				{
+					free(to_free);
+					return (1);
+				}
+			if (line_check == 1)
 			{
 				free(to_free);
-				return (1);
+				return (0);
 			}
 		}
 		free(to_free);
