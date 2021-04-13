@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 12:50:02 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/13 15:04:55 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/13 17:21:51 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,5 @@ typedef struct s_description
 int	path_checker(char *path, char *extension);
 
 int	cub_parser(int fd, t_des **to_fill);
+int	cub_validator(t_des *description);
 #endif
