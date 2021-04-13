@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/12 21:11:43 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/13 11:52:25 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/13 12:34:14 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,5 +134,8 @@ int			map_validator(char ***map)
 			if (check_surrounding(*map, x_index, y_index, &pos_cnt))
 				return (1);
 	}
+	if (pos_cnt != 1)
+		return (1);
+	replace_spaces(map);
 	return (0);
 }
