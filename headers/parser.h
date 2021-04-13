@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 12:35:09 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/12 12:44:22 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/13 16:48:24 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 
 int		count_words(char **words);
 int		parse_number(char *number);
-void	init_description(t_des *to_fill);
+int		init_description(t_des **to_fill);
 void	skip_space(char **line);
-
+int		validate_map_line(char *line, t_des *to_fill);
 
 int		colour_parser(char **line, t_des *description);
 int		map_parser(char **line, t_des *description);
