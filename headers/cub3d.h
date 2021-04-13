@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 12:50:02 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/13 14:26:36 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/13 15:04:55 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ typedef struct s_description
 	int ceiling_c;
 	char **map;
 }	t_des;
+
+int	path_checker(char *path, char *extension);
 
 int	cub_parser(int fd, t_des **to_fill);
 #endif
