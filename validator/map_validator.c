@@ -6,12 +6,11 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/12 21:11:43 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/13 12:34:14 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/13 13:07:21 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "validator.h"
-#include <stdio.h>
 
 static int	add_to_line(char **line, int diff)
 {
