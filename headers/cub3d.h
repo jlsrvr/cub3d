@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 12:50:02 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/13 17:21:51 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/14 10:21:09 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 # define _CUBD3D_H
 # include "../libft/headers/libft.h"
 # include <fcntl.h>
+# include <stdio.h>
+
+# define RED	"\e[31m"
+# define GREEN	"\e[32m"
+# define PINK	"\e[35m"
+# define CYAN	"\e[36m"
+# define BOLD	"\e[1m"
+# define UNDER	"\e[4m"
+# define BLINK	"\e[5m"
+# define RESET  "\e[0m"
 
 typedef struct s_description
 {
