@@ -4,11 +4,22 @@ CC			=	gcc
 
 IDIR		=	headers
 
-LIBS		=	-L../libft/ -lft
+LIBS		=	-L./libft/ -lft
 
 OBJS		=	$(SRC:.c=.o)
 
-SRC 		=	translator.c
+SRC 		=	cub_main.c \
+				cub_utils.c \
+				parser/colour_parser.c \
+				parser/cub_parser.c \
+				parser/map_parser.c \
+				parser/parser_utils.c \
+				parser/resolution_parser.c \
+				parser/texture_parser.c \
+				validator/cub_validator.c \
+				validator/map_validator.c \
+				validator/textures_validator.c \
+				validator/validator_utils.c \
 
 RM			=	rm -f
 
@@ -23,15 +34,15 @@ $(NAME):	make_lib $(OBJS)
 			$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBS)
 
 make_lib:
-	@make libft.a -C ../libft
+	@make libft.a -C ./libft/
 
 clean:
 	$(RM) $(OBJS)
-	@make clean -C ../libft
+	@make clean -C ./libft/
 
 fclean: 	clean
 	$(RM) $(NAME)
-	@make fclean -C ../libft
+	@make fclean -C ./libft/
 
 re:			fclean all
 
