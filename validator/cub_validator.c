@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 15:19:26 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/13 17:24:01 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/14 10:06:39 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,15 @@
 
 int	cub_validator(t_des *description)
 {
-	if (textures_validator(description) || map_validator(&(description->map)))
-			return (1);
+	if (textures_validator(description))
+	{
+		printf("Error\nAt least one of the texture paths is invalid");
+		return (1);
+	}
+	if (map_validator(&(description->map)))
+	{
+		printf("Error\nThe map is invalid");
+		return (1);
+	}
 	return (0);
 }
