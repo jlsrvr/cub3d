@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 17:19:16 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/15 10:41:35 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/15 17:50:32 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static int	dispatch_element(char **line, t_des *to_fill, int *cnt_elems)
 		if (clean_fill(colour_parser(line, to_fill), cnt_elems, to_free))
 			return (1);
 	free(to_free);
+	*line = NULL;
 	return (0);
 }
 
@@ -61,7 +62,7 @@ static int	dispatch_map(char *line, t_des **to_fill)
 		if (map_parser(&line, *to_fill))
 		{
 			free(to_free);
-			return (2);
+			return (1);
 		}
 	if (line_check == 1)
 	{
@@ -72,18 +73,8 @@ static int	dispatch_map(char *line, t_des **to_fill)
 	return (0);
 }
 
-static int	horrible_check_temp(int temp, int gnl)
-{
-	if (temp == 2)
-		return (1);
-	if (temp == 0 && gnl == 0)
-		return (0);
-	return (2);
-}
-
 int			cub_parser(int fd, t_des **to_fill)
 {
-	int		temp;
 	int		gnl;
 	int		cnt_elems;
 	char	*line;
@@ -92,20 +83,18 @@ int			cub_parser(int fd, t_des **to_fill)
 		return (1);
 	cnt_elems = 0;
 	gnl = get_next_line(fd, &line);
-	while ((gnl == 1 || line) && cnt_elems < 8)
+	while (gnl == 1)
 	{
-		if (dispatch_element(&line, *to_fill, &cnt_elems))
+		if (cnt_elems < 8)
+		{
+			if (dispatch_element(&line, *to_fill, &cnt_elems))
+				return (1);
+		}
+		else if (dispatch_map(line, to_fill))
 			return (1);
 		gnl = get_next_line(fd, &line);
 	}
-	while (gnl == 1 || line)
-	{
-		temp = dispatch_map(line, to_fill);
-		if ((horrible_check_temp(temp, gnl)) < 2)
-			return (horrible_check_temp(temp, gnl));
-		gnl = get_next_line(fd, &line);
-		if (temp == 1)
-			return (gnl);
-	}
-	return (gnl * -1);
+	if (cnt_elems < 8)
+		return (1);
+	return (0);
 }
