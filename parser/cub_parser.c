@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 17:19:16 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/13 16:48:42 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/15 10:41:35 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,24 @@ static int	dispatch_map(char *line, t_des **to_fill)
 		if (map_parser(&line, *to_fill))
 		{
 			free(to_free);
-			return (1);
+			return (2);
 		}
 	if (line_check == 1)
 	{
 		free(to_free);
-		return (0);
+		return (1);
 	}
 	free(to_free);
-	return (-1);
+	return (0);
+}
+
+static int	horrible_check_temp(int temp, int gnl)
+{
+	if (temp == 2)
+		return (1);
+	if (temp == 0 && gnl == 0)
+		return (0);
+	return (2);
 }
 
 int			cub_parser(int fd, t_des **to_fill)
@@ -92,11 +101,11 @@ int			cub_parser(int fd, t_des **to_fill)
 	while (gnl == 1 || line)
 	{
 		temp = dispatch_map(line, to_fill);
-		if ((temp == 1) || (temp == 0 && gnl == 0))
-			return (temp);
+		if ((horrible_check_temp(temp, gnl)) < 2)
+			return (horrible_check_temp(temp, gnl));
 		gnl = get_next_line(fd, &line);
-		if (temp == 0 && gnl != 0)
-			return (clean_fill(1, &cnt_elems, line));
+		if (temp == 1)
+			return (gnl);
 	}
 	return (gnl * -1);
 }
