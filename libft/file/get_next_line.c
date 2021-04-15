@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/08 10:55:07 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/01 15:59:38 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/15 15:00:09 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,11 @@ static char	*add_to_line(char **line, char add)
 	index = 0;
 	temp = malloc(sizeof(*temp) * (ft_strlen(*line) + 2));
 	if (!temp)
+	{
+		free(*line);
+		*line = NULL;
 		return (NULL);
+	}
 	while ((*line)[index])
 	{
 		temp[index] = (*line)[index];
@@ -41,6 +45,17 @@ static char	*add_to_line(char **line, char add)
 	free(*line);
 	*line = temp;
 	return (*line);
+}
+
+static int	clean_return(int result, char **line)
+{
+	if (result == 0 && ft_strlen(*line) == 0)
+	{
+		free(*line);
+		*line = NULL;
+		return (0);
+	}
+	return (1);
 }
 
 int	get_next_line(int fd, char **line)
@@ -67,5 +82,5 @@ int	get_next_line(int fd, char **line)
 			return (-1);
 		result = read(fd, buff, 1);
 	}
-	return (result);
+	return (clean_return(result, line));
 }
