@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 16:50:52 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/13 17:09:15 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/16 15:29:06 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void	skip_space(char **line)
 		(*line)++;
 }
 
-int		count_words(char **words)
+int	count_words(char **words)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	while (words[count])
@@ -28,10 +28,10 @@ int		count_words(char **words)
 	return (count);
 }
 
-int		parse_number(char *number)
+int	parse_number(char *number)
 {
-	int num;
-	int digit;
+	int	num;
+	int	digit;
 
 	num = 0;
 	digit = 0;
@@ -71,8 +71,8 @@ int	init_description(t_des **to_fill)
 
 int	validate_map_line(char *line, t_des *to_fill)
 {
-	int index;
-	int filled;
+	int	index;
+	int	filled;
 
 	index = -1;
 	filled = 0;

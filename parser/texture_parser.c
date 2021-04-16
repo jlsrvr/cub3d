@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 16:55:11 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/12 15:13:42 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/16 15:30:41 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ static int	clean_return(char ***dest, int index, char **line)
 
 static char	***build_dest(t_des *description)
 {
-	char ***dest;
+	char	***dest;
 
-	dest = malloc(sizeof(char*) * 5);
+	dest = malloc(sizeof(char *) * 5);
 	if (!dest)
 		return (NULL);
 	dest[0] = &(description->no_path);
@@ -53,7 +53,7 @@ static char	***build_dest(t_des *description)
 	return (dest);
 }
 
-int			texture_parser(char **line, t_des *description)
+int	texture_parser(char **line, t_des *description)
 {
 	int		index;
 	char	***dest;

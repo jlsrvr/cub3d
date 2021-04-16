@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 15:58:41 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/08 15:28:28 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/16 15:30:01 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static int	clean_return(t_des *des, char **numbers, int x_res, int y_res)
 {
-	int num_index;
-	int ret;
+	int	num_index;
+	int	ret;
 
 	ret = 0;
 	des->x_res = x_res;
@@ -34,9 +34,9 @@ static int	clean_return(t_des *des, char **numbers, int x_res, int y_res)
 
 static int	check_split(char **numbers, int *first_index, int *last_index)
 {
-	int num_i;
-	int let_i;
-	int num_cnt;
+	int	num_i;
+	int	let_i;
+	int	num_cnt;
 
 	num_i = -1;
 	num_cnt = 0;
@@ -61,7 +61,7 @@ static int	check_split(char **numbers, int *first_index, int *last_index)
 	return (0);
 }
 
-int			resolution_parser(char **line, t_des *description)
+int	resolution_parser(char **line, t_des *description)
 {
 	int		first_int;
 	int		sec_int;

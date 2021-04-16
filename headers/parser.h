@@ -6,12 +6,12 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/06 12:35:09 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/13 16:48:24 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/16 15:23:34 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _PARSER_H
-# define _PARSER_H
+#ifndef PARSER_H
+# define PARSER_H
 # include "cub3d.h"
 
 int		count_words(char **words);

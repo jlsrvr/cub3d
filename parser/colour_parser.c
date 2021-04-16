@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 15:58:41 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/11 17:00:16 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/16 15:25:41 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static int	**build_dest(t_des *description)
 {
-	int **dest;
+	int	**dest;
 
-	dest = malloc(sizeof(int*) * 5);
+	dest = malloc(sizeof(int *) * 5);
 	if (!dest)
 		return (NULL);
 	dest[0] = &(description->floor_c);
@@ -26,9 +26,9 @@ static int	**build_dest(t_des *description)
 
 static int	hex_conversion(char **numbers)
 {
-	int index;
-	int rgb[3];
-	int hex;
+	int	index;
+	int	rgb[3];
+	int	hex;
 
 	rgb[0] = 0;
 	rgb[1] = 0;
@@ -49,7 +49,7 @@ static int	hex_conversion(char **numbers)
 
 static int	clean_return(int **dest, int index, char **numbers)
 {
-	int num_index;
+	int	num_index;
 
 	num_index = -1;
 	while (numbers[++num_index])
@@ -66,8 +66,8 @@ static int	clean_return(int **dest, int index, char **numbers)
 
 static int	check_line(char *line)
 {
-	int index;
-	int commas;
+	int	index;
+	int	commas;
 
 	index = -1;
 	commas = 0;
@@ -77,7 +77,7 @@ static int	check_line(char *line)
 	return (commas - 2);
 }
 
-int			colour_parser(char **line, t_des *description)
+int	colour_parser(char **line, t_des *description)
 {
 	int		index;
 	int		**dest;

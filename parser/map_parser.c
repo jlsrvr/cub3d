@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 16:18:16 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/11 16:20:02 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/16 15:28:02 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ static int	add_line(char ***map, char *line)
 
 static int	check_line(char **line)
 {
-	int orientation;
-	int index;
+	int	orientation;
+	int	index;
 
 	index = 0;
 	orientation = 0;
@@ -59,7 +59,7 @@ static int	check_line(char **line)
 	return (0);
 }
 
-int			map_parser(char **line, t_des *description)
+int	map_parser(char **line, t_des *description)
 {
 	char	**new;
 	int		index;

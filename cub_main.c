@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/14 09:16:03 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/15 20:59:52 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/16 15:42:43 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	free_description(t_des *description)
 {
-	int index;
+	int	index;
 
 	if (!description)
 		return ;
@@ -51,7 +51,7 @@ static int	pre_game_checks(char **av, int *fd, t_des *ptn_description)
 	return (0);
 }
 
-int			main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	t_des	*ptn_description;
 	int		ret;

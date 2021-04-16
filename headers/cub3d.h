@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _CUBD3D_H
-# define _CUBD3D_H
+#ifndef CUB3D_H
+# define CUB3D_H
 # include "../libft/headers/libft.h"
 # include <fcntl.h>
 # include <stdio.h>
@@ -27,20 +27,20 @@
 
 typedef struct s_description
 {
-	int x_res;
-	int y_res;
-	char *no_path;
-	char *ea_path;
-	char *so_path;
-	char *we_path;
-	char *s_path;
-	int floor_c;
-	int ceiling_c;
-	char **map;
-}	t_des;
+	int		x_res;
+	int		y_res;
+	char	*no_path;
+	char	*ea_path;
+	char	*so_path;
+	char	*we_path;
+	char	*s_path;
+	int		floor_c;
+	int		ceiling_c;
+	char	**map;
+}				t_des;
 
-int	path_checker(char *path, char *extension);
+int				path_checker(char *path, char *extension);
 
-int	cub_parser(int fd, t_des **to_fill);
-int	cub_validator(t_des *description);
+int				cub_parser(int fd, t_des **to_fill);
+int				cub_validator(t_des *description);
 #endif

@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/12 21:11:43 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/13 13:07:21 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/16 15:35:26 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ static int	map_squarer(char ***map, int *x_max, int *y_max)
 
 static int	outer_validation(char **map, int x_max, int y_max)
 {
-	int x_index;
-	int y_index;
+	int	x_index;
+	int	y_index;
 
 	y_index = -1;
 	while (map[++y_index])
@@ -110,13 +110,13 @@ static int	check_surrounding(char **map, int pos_x, int pos_y, int *pos_cnt)
 	return (0);
 }
 
-int			map_validator(char ***map)
+int	map_validator(char ***map)
 {
-	int x_max;
-	int y_max;
-	int x_index;
-	int y_index;
-	int pos_cnt;
+	int	x_max;
+	int	y_max;
+	int	x_index;
+	int	y_index;
+	int	pos_cnt;
 
 	x_max = 0;
 	y_max = 0;

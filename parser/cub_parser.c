@@ -25,9 +25,9 @@ static int	clean_fill(int result, int *cnt_elems, char *to_free)
 
 static int	dispatch_element(char **line, t_des *to_fill, int *cnt_elems)
 {
-	char *identifiers;
-	char *to_free;
-	char *type;
+	char	*identifiers;
+	char	*to_free;
+	char	*type;
 
 	to_free = *line;
 	identifiers = "RNOEASOWESFC";
@@ -59,11 +59,13 @@ static int	dispatch_map(char *line, t_des **to_fill)
 	to_free = line;
 	line_check = validate_map_line(line, *to_fill);
 	if (!line_check)
+	{
 		if (map_parser(&line, *to_fill))
 		{
 			free(to_free);
 			return (1);
 		}
+	}
 	if (line_check == 1)
 	{
 		free(to_free);
@@ -73,7 +75,7 @@ static int	dispatch_map(char *line, t_des **to_fill)
 	return (0);
 }
 
-int			cub_parser(int fd, t_des **to_fill)
+int	cub_parser(int fd, t_des **to_fill)
 {
 	int		gnl;
 	int		cnt_elems;

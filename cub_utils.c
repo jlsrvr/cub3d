@@ -6,7 +6,7 @@
 /*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 15:03:56 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/13 15:06:33 by jrivoire         ###   ########.fr       */
+/*   Updated: 2021/04/16 15:35:46 by jrivoire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	path_checker(char *path, char *extension)
 {
-	int fd;
-	int pos_ext;
+	int	fd;
+	int	pos_ext;
 
 	fd = open(path, O_DIRECTORY);
 	if (fd != -1)
@@ -32,4 +32,3 @@ int	path_checker(char *path, char *extension)
 		return (1);
 	return (0);
 }
-
