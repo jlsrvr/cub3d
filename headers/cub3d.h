@@ -15,6 +15,8 @@
 # include "../libft/headers/libft.h"
 # include <fcntl.h>
 # include <stdio.h>
+# include <stdlib.h>
+# include <mlx.h>
 
 # define RED	"\e[31m"
 # define GREEN	"\e[32m"
