@@ -2,9 +2,9 @@ NAME		=	cub3d
 
 CC			=	clang
 
-IDIR		=	headers
+IDIR		=	-I./headers -I./minilibx-linux
 
-LIBS		=	-L./libft/ -lft
+LIBS		=	-L./libft/ -L./minilibx-linux/ -lft -lmlx -lXext -lX11
 
 OBJS		=	$(SRC:.c=.o)
 
@@ -26,23 +26,28 @@ RM			=	rm -f
 FLAGS		=	-Wall -Wextra -Werror
 
 .c.o:
-	$(CC) $(FLAGS) -I$(IDIR) -c $< -o $(<:.c=.o)
+	$(CC) $(FLAGS) $(IDIR) -c $< -o $(<:.c=.o)
 
 all:		$(NAME)
 
-$(NAME):	make_lib $(OBJS)
+$(NAME):	make_lib make_mlx $(OBJS)
 			$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBS)
 
 make_lib:
 	@make libft.a -C ./libft/
 
+make_mlx:
+	@make -C ./minilibx-linux/
+
 clean:
 	$(RM) $(OBJS)
 	@make clean -C ./libft/
+	@make clean -C ./minilibx-linux/
 
 fclean: 	clean
 	$(RM) $(NAME)
 	@make fclean -C ./libft/
+	@make clean -C ./minilibx-linux/
 
 re:			fclean all
 
