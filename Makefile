@@ -1,6 +1,6 @@
 NAME		=	cub3d
 
-CC			=	gcc
+CC			=	clang
 
 IDIR		=	headers
 
