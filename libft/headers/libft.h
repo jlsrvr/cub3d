@@ -24,7 +24,7 @@ typedef struct s_list
 }				t_list;
 
 char			*ft_itoa(int n);
-char			*ft_uitoa_base(uintmax_t n, char *base);
+char			*ft_uitoa_base(__uintmax_t n, char *base);
 char			*ft_strchr(const char *s, int c);
 char			*ft_strdup(const char *src);
 char			*ft_strjoin(char const *s1, char const *s2);

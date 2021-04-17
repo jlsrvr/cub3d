@@ -34,7 +34,7 @@ static int	check_base(char *base)
 	return (1);
 }
 
-static	size_t	len_num(uintmax_t nbr, size_t basetype)
+static	size_t	len_num(__uintmax_t nbr, size_t basetype)
 {
 	size_t	len;
 
@@ -49,7 +49,7 @@ static	size_t	len_num(uintmax_t nbr, size_t basetype)
 	return (len + 1);
 }
 
-static	void	store_num(uintmax_t nbr, char *num,
+static	void	store_num(__uintmax_t nbr, char *num,
 							size_t *index, char *base)
 {
 	size_t	basetype;
@@ -66,7 +66,7 @@ static	void	store_num(uintmax_t nbr, char *num,
 	return ;
 }
 
-char	*ft_uitoa_base(uintmax_t n, char *base)
+char	*ft_uitoa_base(__uintmax_t n, char *base)
 {
 	char				*num;
 	size_t				index;
