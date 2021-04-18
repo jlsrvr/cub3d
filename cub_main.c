@@ -73,12 +73,6 @@
 #include <X11/X.h>
 #include <X11/keysym.h>
 
-typedef struct s_data
-{
-	void	*mlx_ptr;
-	void	*win_ptr;
-
-}	t_data;
 
 typedef struct s_rect
 {
@@ -89,6 +83,23 @@ typedef struct s_rect
 	int color;
 
 }	t_rect;
+
+typedef struct s_img
+{
+	void	*mlx_img;
+	char	*addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
+}	t_img;
+
+typedef struct s_data
+{
+	void	*mlx_ptr;
+	void	*win_ptr;
+	t_img	img;
+
+}	t_data;
 
 int handle_keypress(int keysym, t_data *data)
 {
@@ -142,28 +153,66 @@ int handle_keyrelease(int keysym, void *data)
 #define WIN_X 1200
 #define WIN_Y 800
 
-int render_rect(t_data *data, t_rect rect)
+void	img_pix_put(t_img *img, int x, int y, int color)
+{
+	char    *pixel;
+	int		pix_pos;
+	int		i;
+
+	i = img->bpp - 8;
+	pix_pos = y * img->line_len + x * (img->bpp / 8);
+	pixel = img->addr + pix_pos;
+	while (i >= 0)
+	{
+		/* big endian, MSB is the leftmost bit */
+		if (img->endian != 0)
+			*pixel++ = (color >> i) & 0xFF;
+		/* little endian, LSB is the leftmost bit */
+		else
+			*pixel++ = (color >> (img->bpp - 8 - i)) & 0xFF;
+		i -= 8;
+	}
+}
+
+int render_rect(t_img *img, t_rect rect)
 {
 	int	i;
 	int j;
 
-	if (data->win_ptr == NULL)
-		return (1);
 	i = rect.y;
 	while (i < rect.y + rect.height)
 	{
 		j = rect.x;
 		while (j < rect.x + rect.width)
-			mlx_pixel_put(data->mlx_ptr, data->win_ptr, j++, i, rect.color);
+			img_pix_put(img, j++, i, rect.color);
 		++i;
 	}
 	return (0);
 }
 
+void	render_background(t_img *img, int color)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < WIN_Y)
+	{
+		j = 0;
+		while (j < WIN_X)
+			img_pix_put(img, j++, i, color);
+		++i;
+	}
+}
+
 int render(t_data *data)
 {
-	render_rect(data, (t_rect){WIN_X - 200, WIN_Y - 200, 100, 50, 0x00FF00});
-	render_rect(data, (t_rect){0, WIN_Y - 150, 200, 50, 0x00FFFF});
+	if (data->win_ptr == NULL)
+		return (1);
+	render_background(&data->img, 0xffffff);
+	render_rect(&data->img, (t_rect){WIN_X - 200, WIN_Y - 200, 100, 50, 0x00FF00});
+	render_rect(&data->img, (t_rect){0, WIN_Y - 150, 200, 50, 0x00FFFF});
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
 	return (0);
 }
 
@@ -173,7 +222,8 @@ int main(void)
 
 	data.mlx_ptr = mlx_init();
 	data.win_ptr = mlx_new_window(data.mlx_ptr, WIN_X, WIN_Y, "I Have keys");
-
+	data.img.mlx_img = mlx_new_image(data.mlx_ptr, WIN_X, WIN_Y);
+	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
 	mlx_loop_hook(data.mlx_ptr, &render, &data);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
 	mlx_hook(data.win_ptr, KeyRelease, KeyReleaseMask, &handle_keyrelease, &data);
