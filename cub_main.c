@@ -70,7 +70,7 @@
  return (ret);
  }*/
 
-/*char world_map[25][25] =
+char world_map[25][24] =
 {
 	"111111111111111111111111",
 	"100000000000000000000001",
@@ -96,8 +96,7 @@
 	"100000000000000000000001",
 	"100000000000000000000001",
 	"111111111111111111111111",
-	NULL
-};*/
+};
 
 #include <X11/X.h>
 #include <X11/keysym.h>
@@ -105,6 +104,15 @@
 #define RED_PIXEL 0xFF0000
 #define WIN_X 1200
 #define WIN_Y 800
+
+typedef struct s_ray
+{
+	int	x;
+	int y_start;
+	int y_end;
+	int color;
+
+}	t_ray;
 
 typedef struct s_rect
 {
@@ -218,6 +226,18 @@ int render_rect(t_img *img, t_rect rect)
 	return (0);
 }
 
+int render_ray(t_img *img, t_ray ray)
+{
+	int y;
+
+	y = ray.y_start;
+	while (y < ray.y_end)
+	{
+		img_pix_put(img, ray.x, y++, ray.color);
+	}
+	return (0);
+}
+
 void	render_background(t_img *img, int color)
 {
 	int	i;
@@ -233,6 +253,20 @@ void	render_background(t_img *img, int color)
 	}
 }
 
+double set_delta_dist(double ray_dir, double ray_dir_other)
+{
+	double delta_dist;
+
+	delta_dist = 0;
+	if (ray_dir_other != 0)
+	{
+		delta_dist = 1;
+		if (ray_dir != 0)
+			delta_dist = fabs(1 / ray_dir);
+	}
+	return (delta_dist);
+}
+
 int render(t_data *data)
 {
 	double pos_x = 5;
@@ -241,13 +275,14 @@ int render(t_data *data)
 	double dir_y = 0; // -1 south, 1 north
 	double plane_x = 0;
 	double plane_y = 0.66;
-	double time;
-	double old_time;
+	//double time;
+	//double old_time;
 	double camera_x;
 	double ray_dir_x;
 	double ray_dir_y;
 	int x = 0;
 	int w = WIN_X;
+	int h = WIN_Y;
 	int map_x;
 	int map_y;
 	double side_dist_x;
@@ -259,6 +294,10 @@ int render(t_data *data)
 	int step_y;
 	int hit;
 	int side;
+	int line_height;
+	int draw_start;
+	int draw_end;
+	int colour = 0;
 
 	if (data->win_ptr == NULL)
 		return (1);
@@ -266,18 +305,69 @@ int render(t_data *data)
 	render_rect(&data->img, (t_rect){0, 0, WIN_X, WIN_Y / 2, 0x00FFFF}); //ceiling
 	while (x < w)
 	{
-		camera_x = 2 * x/ double(w) - 1;
-		ray_dir_x = dir_x + (plane_x * camera_x)
-		ray_dir_y= dir_y + (plane_y * camera_y)
+		camera_x = 2 * x / (double)w - 1;
+		ray_dir_x = dir_x + (plane_x * camera_x);
+		ray_dir_y= dir_y + (plane_y * camera_x);
 		map_x = (int)pos_x;
 		map_y = (int)pos_y;
-		delta_dist_x = 1;
-		if (!ray_dir_x)
-			delta_dist_x = fabs(1 / ray_dir_x);
-		delta_dist_y = 1;
-		if (!ray_dir_y)
-			delta_dist_y = fabs(1 / ray_dir_y);
+		delta_dist_x = set_delta_dist(ray_dir_x, ray_dir_y);
+		delta_dist_y = set_delta_dist(ray_dir_y, ray_dir_x);
 		hit = 0;
+		if (ray_dir_x < 0)
+		{
+			step_x = -1;
+			side_dist_x = (pos_x - map_x) * delta_dist_x;
+		}
+		else
+		{
+			step_x = 1;
+			side_dist_x = (map_x + 1.0 - pos_x) * delta_dist_x;
+		}
+		if (ray_dir_y < 0)
+		{
+			step_y = -1;
+			side_dist_y = (pos_y - map_y) * delta_dist_y;
+		}
+		else
+		{
+			step_y = 1;
+			side_dist_y = (map_y + 1.0 - pos_y) * delta_dist_y;
+		}
+		while (hit == 0)
+		{
+			if (side_dist_x < side_dist_y)
+			{
+				side_dist_x += delta_dist_x;
+				map_x += step_x;
+				side = 0;
+			}
+			else
+			{
+				side_dist_y += delta_dist_y;
+				map_y += step_y;
+				side = 1;
+			}
+			if (world_map[map_x][map_y] > 0)
+				hit = 1;
+		}
+		if (side == 0)
+		{
+			perp_wall_dist = (map_x - pos_x + (1 - step_x) / 2) / ray_dir_x;
+		}
+		else
+		{
+			perp_wall_dist = (map_y - pos_y + (1 - step_y) / 2) / ray_dir_y;
+		}
+		line_height = (int)(h / perp_wall_dist);
+		draw_start = -line_height / 2 + h / 2;
+		if (draw_start < 0)
+			draw_start = 0;
+		draw_end = line_height / 2 + h / 2;
+		if (draw_end >= h)
+			draw_end = h - 1;
+		if (side == 1)
+			colour /= 2;
+		render_ray(data->img.mlx_img, (t_ray){x, draw_start, draw_end, colour});
 		x++;
 	}
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
