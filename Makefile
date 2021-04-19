@@ -4,7 +4,7 @@ CC			=	clang
 
 IDIR		=	-I./headers -I./minilibx-linux
 
-LIBS		=	-L./libft/ -L./minilibx-linux/ -lft -lmlx -lXext -lX11
+LIBS		=	-L./libft/ -L./minilibx-linux/ -lft -lmlx -lXext -lX11 -lm
 
 OBJS		=	$(SRC:.c=.o)
 
