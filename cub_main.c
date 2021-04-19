@@ -233,7 +233,8 @@ int render_ray(t_img *img, t_ray ray)
 	y = ray.y_start;
 	while (y < ray.y_end)
 	{
-		img_pix_put(img, ray.x, y++, ray.color);
+		img_pix_put(img, ray.x, y, ray.color);
+		y++;
 	}
 	return (0);
 }
@@ -271,7 +272,7 @@ int render(t_data *data)
 {
 	double pos_x = 5;
 	double pos_y = 6;
-	double dir_x = -1; // -1 west, 1 east
+	double dir_x = 1; // -1 west, 1 east
 	double dir_y = 0; // -1 south, 1 north
 	double plane_x = 0;
 	double plane_y = 0.66;
@@ -297,7 +298,7 @@ int render(t_data *data)
 	int line_height;
 	int draw_start;
 	int draw_end;
-	int colour = 0;
+	int colour;
 
 	if (data->win_ptr == NULL)
 		return (1);
@@ -347,7 +348,7 @@ int render(t_data *data)
 				map_y += step_y;
 				side = 1;
 			}
-			if (world_map[map_x][map_y] > 0)
+			if (world_map[map_x][map_y] > '0')
 				hit = 1;
 		}
 		if (side == 0)
@@ -365,9 +366,12 @@ int render(t_data *data)
 		draw_end = line_height / 2 + h / 2;
 		if (draw_end >= h)
 			draw_end = h - 1;
+		colour = RED_PIXEL;
 		if (side == 1)
-			colour /= 2;
-		render_ray(data->img.mlx_img, (t_ray){x, draw_start, draw_end, colour});
+		{
+			colour = colour/ 2;
+		}
+		render_ray(&data->img, (t_ray){x, draw_start, draw_end, colour});
 		x++;
 	}
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
