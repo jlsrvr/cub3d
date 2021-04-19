@@ -70,32 +70,18 @@
  return (ret);
  }*/
 
-char world_map[25][24] =
+char world_map[10][10] =
 {
-	"111111111111111111111111",
-	"100000000000000000000001",
-	"100000000000000000000001",
-	"100000000000000000000001",
-	"100000000000000000000001",
-	"100000000000000000000001",
-	"100000000010000000000001",
-	"100000000010000000000001",
-	"100000000010000000000001",
-	"100000000010000000000001",
-	"100000000010000000000001",
-	"100000000010000000000001",
-	"100000000010000000000001",
-	"100000000011111111000001",
-	"100000000000000000000001",
-	"100000000000000000000001",
-	"100000100000000000000001",
-	"100000010000000000000001",
-	"100000011000000000000001",
-	"100000011100000000000001",
-	"100000000000000000000001",
-	"100000000000000000000001",
-	"100000000000000000000001",
-	"111111111111111111111111",
+	"1111111111",
+	"1000000001",
+	"1000000011",
+	"1000000001",
+	"1000000001",
+	"1000000001",
+	"1000000001",
+	"1000000001",
+	"1000000001",
+	"1111111111"
 };
 
 #include <X11/X.h>
@@ -113,6 +99,35 @@ typedef struct s_ray
 	int color;
 
 }	t_ray;
+
+typedef struct s_cast
+{
+	double pos_x;
+	double pos_y;
+	double dir_x;
+	double dir_y;
+	double plane_x;
+	double plane_y;
+	double camera_x;
+	double ray_dir_x;
+	double ray_dir_y;
+	int map_x;
+	int map_y;
+	double side_dist_x;
+	double side_dist_y;
+	double  delta_dist_x;
+	double  delta_dist_y;
+	double perp_wall_dist;
+	int step_x;
+	int step_y;
+	int hit;
+	int side;
+	int line_height;
+	int draw_start;
+	int draw_end;
+	int colour;
+
+}	t_cast;
 
 typedef struct s_rect
 {
@@ -137,7 +152,9 @@ typedef struct s_data
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
+	t_cast 	cast;
 	t_img	img;
+	//t_des	*description;
 
 }	t_data;
 
@@ -239,21 +256,6 @@ int render_ray(t_img *img, t_ray ray)
 	return (0);
 }
 
-void	render_background(t_img *img, int color)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < WIN_Y)
-	{
-		j = 0;
-		while (j < WIN_X)
-			img_pix_put(img, j++, i, color);
-		++i;
-	}
-}
-
 double set_delta_dist(double ray_dir, double ray_dir_other)
 {
 	double delta_dist;
@@ -268,112 +270,109 @@ double set_delta_dist(double ray_dir, double ray_dir_other)
 	return (delta_dist);
 }
 
-int render(t_data *data)
+static void init_raycaster(t_cast *cast)
 {
-	double pos_x = 5;
-	double pos_y = 6;
-	double dir_x = 1; // -1 west, 1 east
-	double dir_y = 0; // -1 south, 1 north
-	double plane_x = 0;
-	double plane_y = 0.66;
-	//double time;
-	//double old_time;
-	double camera_x;
-	double ray_dir_x;
-	double ray_dir_y;
+	cast->pos_x = 5; // = description->player_pos_x
+	cast->pos_y = 5; // = description->player_pos_y
+	cast->dir_x = 0; // -1 west, 1 east = description->player_dir_y
+	cast->dir_y = 1; // -1 south, 1 north = description->player_dir_y
+	cast->plane_x = 0;
+	cast->plane_y = 0.66;
+}
+
+static void init_raycaster_loop(t_cast *cast, int x, int w)
+{
+		cast->camera_x = 2 * x / (double)w - 1;
+		cast->ray_dir_x = cast->dir_x + (cast->plane_x * cast->camera_x);
+		cast->ray_dir_y= cast->dir_y + (cast->plane_y * cast->camera_x);
+		cast->map_x = (int)cast->pos_x;
+		cast->map_y = (int)cast->pos_y;
+		cast->delta_dist_x = set_delta_dist(cast->ray_dir_x, cast->ray_dir_y);
+		cast->delta_dist_y = set_delta_dist(cast->ray_dir_y, cast->ray_dir_x);
+		cast->hit = 0;
+}
+
+static int raycaster(t_cast cast, t_img *img)
+{
 	int x = 0;
 	int w = WIN_X;
 	int h = WIN_Y;
-	int map_x;
-	int map_y;
-	double side_dist_x;
-	double side_dist_y;
-	double  delta_dist_x;
-	double  delta_dist_y;
-	double perp_wall_dist;
-	int step_x;
-	int step_y;
-	int hit;
-	int side;
-	int line_height;
-	int draw_start;
-	int draw_end;
-	int colour;
 
-	if (data->win_ptr == NULL)
-		return (1);
-	render_rect(&data->img, (t_rect){0, WIN_Y * 0.5, WIN_X, WIN_Y / 2, 0x00FF00}); //floor
-	render_rect(&data->img, (t_rect){0, 0, WIN_X, WIN_Y / 2, 0x00FFFF}); //ceiling
 	while (x < w)
 	{
-		camera_x = 2 * x / (double)w - 1;
-		ray_dir_x = dir_x + (plane_x * camera_x);
-		ray_dir_y= dir_y + (plane_y * camera_x);
-		map_x = (int)pos_x;
-		map_y = (int)pos_y;
-		delta_dist_x = set_delta_dist(ray_dir_x, ray_dir_y);
-		delta_dist_y = set_delta_dist(ray_dir_y, ray_dir_x);
-		hit = 0;
-		if (ray_dir_x < 0)
+		init_raycaster_loop(&cast, x, w);
+		if (cast.ray_dir_x < 0)
 		{
-			step_x = -1;
-			side_dist_x = (pos_x - map_x) * delta_dist_x;
+			cast.step_x = -1;
+			cast.side_dist_x = (cast.pos_x - cast.map_x) * cast.delta_dist_x;
 		}
 		else
 		{
-			step_x = 1;
-			side_dist_x = (map_x + 1.0 - pos_x) * delta_dist_x;
+			cast.step_x = 1;
+			cast.side_dist_x = (cast.map_x + 1.0 - cast.pos_x) * cast.delta_dist_x;
 		}
-		if (ray_dir_y < 0)
+		if (cast.ray_dir_y < 0)
 		{
-			step_y = -1;
-			side_dist_y = (pos_y - map_y) * delta_dist_y;
+			cast.step_y = -1;
+			cast.side_dist_y = (cast.pos_y - cast.map_y) * cast.delta_dist_y;
 		}
 		else
 		{
-			step_y = 1;
-			side_dist_y = (map_y + 1.0 - pos_y) * delta_dist_y;
+			cast.step_y = 1;
+			cast.side_dist_y = (cast.map_y + 1.0 - cast.pos_y) * cast.delta_dist_y;
 		}
-		while (hit == 0)
+		while (cast.hit == 0)
 		{
-			if (side_dist_x < side_dist_y)
+			if (cast.side_dist_x < cast.side_dist_y)
 			{
-				side_dist_x += delta_dist_x;
-				map_x += step_x;
-				side = 0;
+				cast.side_dist_x += cast.delta_dist_x;
+				cast.map_x += cast.step_x;
+				cast.side = 0;
 			}
 			else
 			{
-				side_dist_y += delta_dist_y;
-				map_y += step_y;
-				side = 1;
+				cast.side_dist_y += cast.delta_dist_y;
+				cast.map_y += cast.step_y;
+				cast.side = 1;
 			}
-			if (world_map[map_x][map_y] > '0')
-				hit = 1;
+			if (world_map[cast.map_x][cast.map_y] > '0')
+				cast.hit = 1;
 		}
-		if (side == 0)
+		if (cast.side == 0)
 		{
-			perp_wall_dist = (map_x - pos_x + (1 - step_x) / 2) / ray_dir_x;
+			cast.perp_wall_dist = (cast.map_x - cast.pos_x + (1 - cast.step_x) / 2) / cast.ray_dir_x;
 		}
 		else
 		{
-			perp_wall_dist = (map_y - pos_y + (1 - step_y) / 2) / ray_dir_y;
+			cast.perp_wall_dist = (cast.map_y - cast.pos_y + (1 - cast.step_y) / 2) / cast.ray_dir_y;
 		}
-		line_height = (int)(h / perp_wall_dist);
-		draw_start = -line_height / 2 + h / 2;
-		if (draw_start < 0)
-			draw_start = 0;
-		draw_end = line_height / 2 + h / 2;
-		if (draw_end >= h)
-			draw_end = h - 1;
-		colour = RED_PIXEL;
-		if (side == 1)
+		cast.line_height = (int)(h / cast.perp_wall_dist);
+		cast.draw_start = -cast.line_height / 2 + h / 2;
+		if (cast.draw_start < 0)
+			cast.draw_start = 0;
+		cast.draw_end = cast.line_height / 2 + h / 2;
+		if (cast.draw_end >= h)
+			cast.draw_end = h - 1;
+		cast.colour = RED_PIXEL;
+		if (cast.side == 1)
 		{
-			colour = colour/ 2;
+			cast.colour = 0x920000;
 		}
-		render_ray(&data->img, (t_ray){x, draw_start, draw_end, colour});
+		render_ray(img, (t_ray){x, cast.draw_start, cast.draw_end, cast.colour});
 		x++;
 	}
+	return (0);
+}
+
+int render_map(t_data *data)
+{
+
+	if (data->win_ptr == NULL)
+		return (1);
+	render_rect(&data->img, (t_rect){0, WIN_Y * 0.5, WIN_X, WIN_Y / 2, 0x00FF00}); //floor data->description->floor_c
+	render_rect(&data->img, (t_rect){0, 0, WIN_X, WIN_Y / 2, 0x00FFFF}); //ceiling
+	init_raycaster(&data->cast);
+	raycaster(data->cast, &data->img);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
 	return (0);
 }
@@ -386,7 +385,7 @@ int main(void)
 	data.win_ptr = mlx_new_window(data.mlx_ptr, WIN_X, WIN_Y, "Raycasting simple");
 	data.img.mlx_img = mlx_new_image(data.mlx_ptr, WIN_X, WIN_Y);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
-	mlx_loop_hook(data.mlx_ptr, &render, &data);
+	mlx_loop_hook(data.mlx_ptr, &render_map, &data);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
 	mlx_hook(data.win_ptr, KeyRelease, KeyReleaseMask, &handle_keyrelease, &data);
 	mlx_loop(data.mlx_ptr);
