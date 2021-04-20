@@ -64,9 +64,14 @@ int	main(int ac, char **av)
 		printf(RED"Error\n"RESET"A path to a scene description must be given!");
 		return (1);
 	}
-	ret = pre_game_checks(av, &fd, &ptn_description);
+	if (pre_game_checks(av, &fd, &ptn_description))
+	{
+		close(fd);
+		free_description(ptn_description);
+		return (1);
+	}
 	close(fd);
 	cub_engine(ptn_description);
 	free_description(ptn_description);
-	return (ret);
+	return (0);
 }

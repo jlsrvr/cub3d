@@ -100,7 +100,7 @@ static void init_raycaster(t_cast *cast, t_des *desc)
 	cast->height = WIN_Y;// = description->player_resolution
 	cast->pos_x = desc->pos_x;
 	cast->pos_y = desc->pos_y;
-	cast->dir_x = desc->dir_y;
+	cast->dir_x = desc->dir_x;
 	cast->dir_y = desc->dir_y;
 	cast->plane_x = cast->dir_y * 0.66;
 	cast->plane_y = cast->dir_x * -0.66;
@@ -159,7 +159,7 @@ static void cast_ray(t_cast *cast, t_des *desc)
 			cast->map_y += cast->step_y;
 			cast->side = 1;
 		}
-		if ((desc->map)[cast->map_x][cast->map_y] > '0')/// Worth trying with == '1'
+		if (desc->map[cast->map_x][cast->map_y] > '0')/// Worth trying with == '1'
 			cast->hit = 1;
 	}
 }
