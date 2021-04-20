@@ -66,6 +66,10 @@ int	init_description(t_des **to_fill)
 	(*to_fill)->floor_c = -2;
 	(*to_fill)->ceiling_c = -2;
 	(*to_fill)->map = NULL;
+	(*to_fill)->pos_x = 0;
+	(*to_fill)->pos_y = 0;
+	(*to_fill)->dir_x = 0;
+	(*to_fill)->dir_y = 0;
 	return (0);
 }
 

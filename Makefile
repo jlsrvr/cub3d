@@ -10,6 +10,8 @@ OBJS		=	$(SRC:.c=.o)
 
 SRC 		=	cub_main.c \
 				cub_utils.c \
+				engine/cub_engine.c \
+				engine/mouvement.c \
 				parser/colour_parser.c \
 				parser/cub_parser.c \
 				parser/map_parser.c \
