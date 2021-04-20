@@ -19,7 +19,7 @@ int	cub_validator(t_des *description)
 		printf("Error\nAt least one of the texture paths is invalid");
 		return (1);
 	}
-	if (map_validator(&(description->map)))
+	if (map_validator(description))
 	{
 		printf("Error\nThe map is invalid");
 		return (1);
