@@ -17,13 +17,13 @@ char world_map[10][10] =
 {
 	"1111111111",
 	"1000000001",
-	"1000000011",
+	"1000001111",
 	"1000000001",
 	"1000000001",
 	"1000000001",
-	"1000000001",
-	"1000000001",
-	"1000000001",
+	"1110000001",
+	"1010000001",
+	"1010000001",
 	"1111111111"
 };
 
@@ -314,6 +314,7 @@ int render_map(t_data *data)
 
 int handle_keypress(int keysym, t_data *data)
 {
+	double rot_speed = 0.3;
 	if (keysym == XK_Escape)
 	{
 		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
@@ -326,14 +327,14 @@ int handle_keypress(int keysym, t_data *data)
 	else if (keysym == XK_a)
 	{
 		printf("Keypress 'a' (rotate left)\n");
-		double rot_speed = 3;
-		double old_dir_x = data->cast.dir_x;
-		data->cast.dir_x = data->cast.dir_x * cos(-rot_speed) - data->cast.dir_y * sin(-rot_speed);
+		/*double old_dir_x = data->cast.dir_x;
+		data->cast.dir_x = data->cast.dir_x * cos(rot_speed) - data->cast.dir_y * sin(rot_speed);
+		printf("Old = [%f] new = [%f]\n", old_dir_x, data->cast.dir_x);
 		data->cast.dir_y = old_dir_x * sin(-rot_speed) + data->cast.dir_y * cos(-rot_speed);
 		double old_plane_x = data->cast.plane_x;
-		data->cast.plane_x = data->cast.plane_x * cos(-rot_speed) - data->cast.plane_y * sin(-rot_speed);
-		data->cast.plane_y = old_plane_x * sin(-rot_speed) + data->cast.plane_y * cos(-rot_speed);
-		render_map(data);
+		data->cast.plane_x = data->cast.plane_x * cos(rot_speed) - data->cast.plane_y * sin(rot_speed);
+		data->cast.plane_y = old_plane_x * sin(rot_speed) + data->cast.plane_y * cos(rot_speed);
+		render_map(data);*/
 	}
 	else if (keysym == XK_s)
 	{
@@ -342,6 +343,14 @@ int handle_keypress(int keysym, t_data *data)
 	else if (keysym == XK_d)
 	{
 		printf("Keypress 'd' (rotate right)\n");
+		double old_dir_x = data->cast.dir_x;
+		data->cast.dir_x = data->cast.dir_x * cos(-rot_speed) - data->cast.dir_y * sin(-rot_speed);
+		printf("Old = [%f] new = [%f]\n", old_dir_x, data->cast.dir_x);
+		data->cast.dir_y = old_dir_x * sin(-rot_speed) + data->cast.dir_y * cos(-rot_speed);
+		double old_plane_x = data->cast.plane_x;
+		data->cast.plane_x = data->cast.plane_x * cos(-rot_speed) - data->cast.plane_y * sin(-rot_speed);
+		printf("Old = [%f] new = [%f]\n", old_plane_x, data->cast.plane_x);
+		data->cast.plane_y = old_plane_x * sin(-rot_speed) + data->cast.plane_y * cos(-rot_speed);
 	}
 	return (0);
 }
@@ -355,8 +364,8 @@ int main(void)
 	data.img.mlx_img = mlx_new_image(data.mlx_ptr, WIN_X, WIN_Y);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
 	init_raycaster(&data.cast);
-	mlx_loop_hook(data.mlx_ptr, &render_map, &data);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
+	mlx_loop_hook(data.mlx_ptr, &render_map, &data);
 	mlx_hook(data.win_ptr, KeyRelease, KeyReleaseMask, &handle_keyrelease, &data);
 	mlx_loop(data.mlx_ptr);
 	mlx_destroy_display(data.mlx_ptr);
