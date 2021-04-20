@@ -39,6 +39,10 @@ typedef struct s_description
 	int		floor_c;
 	int		ceiling_c;
 	char	**map;
+	double	pos_x;
+	double	pos_y;
+	double	dir_x;
+	double	dir_y;
 }				t_des;
 
 int				path_checker(char *path, char *extension);
