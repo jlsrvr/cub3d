@@ -312,19 +312,62 @@ int render_map(t_data *data)
 	return (0);
 }
 
+#define KEY_A 0x0061
+#define KEY_D 0x0064
+#define KEY_S 0x0073
+#define KEY_W 0x0077
+#define LEFT_ARROW 0xff51
+#define RIGHT_ARROW 0xff53
 int handle_keypress(int keysym, t_data *data)
 {
 	double rot_speed = 0.3;
+	double move_speed = 0.5;
 	if (keysym == XK_Escape)
 	{
 		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
 		data->win_ptr = NULL;
 	}
-	else if (keysym == XK_w)
+	else if (keysym == KEY_W)
 	{
 		printf("Keypress 'w' (forward)\n");
+		int next_x = (int)(data->cast.pos_x + data->cast.dir_x * move_speed);
+		int next_y = (int)(data->cast.pos_y + data->cast.dir_y * move_speed);
+		if (world_map[next_x][(int)(data->cast.pos_y)] == (int)'0')
+			data->cast.pos_x = next_x;
+		if (world_map[(int)(data->cast.pos_x)][next_y] == (int)'0')
+			data->cast.pos_y = next_y;
 	}
-	else if (keysym == XK_a)
+	else if (keysym == KEY_S)
+	{
+		printf("Keypress 's' (backward)\n");
+		int next_x = (int)(data->cast.pos_x - data->cast.dir_x * move_speed);
+		int next_y = (int)(data->cast.pos_y - data->cast.dir_y * move_speed);
+		if (world_map[next_x][(int)(data->cast.pos_y)] == (int)'0')
+			data->cast.pos_x = next_x;
+		if (world_map[(int)(data->cast.pos_x)][next_y] == (int)'0')
+			data->cast.pos_y = next_y;
+	}
+	else if (keysym == KEY_A)
+	{
+		printf("Keypress 'a' (left)\n");
+		int next_x = (int)(data->cast.pos_x - data->cast.dir_y * move_speed);
+		int next_y = (int)(data->cast.pos_y + data->cast.dir_x * move_speed);
+		if (world_map[next_x][(int)(data->cast.pos_y)] == (int)'0')
+			data->cast.pos_x = next_x;
+		if (world_map[(int)(data->cast.pos_x)][next_y] == (int)'0')
+			data->cast.pos_y = next_y;
+	}
+	else if (keysym == KEY_D)
+	{
+		printf("Keypress 'd' (right)\n");
+		int next_x = (int)(data->cast.pos_x + data->cast.dir_y * move_speed);
+		int next_y = (int)(data->cast.pos_y - data->cast.dir_x * move_speed);
+		if (world_map[next_x][(int)(data->cast.pos_y)] == (int)'0')
+			data->cast.pos_x = next_x;
+		if (world_map[(int)(data->cast.pos_x)][next_y] == (int)'0')
+			data->cast.pos_y = next_y;
+	}
+	else if (keysym == LEFT_ARROW)
 	{
 		printf("Keypress 'a' (rotate left)\n");
 		double old_dir_x = data->cast.dir_x;
@@ -334,11 +377,7 @@ int handle_keypress(int keysym, t_data *data)
 		data->cast.plane_x = data->cast.plane_x * cos(rot_speed) - data->cast.plane_y * sin(rot_speed);
 		data->cast.plane_y = old_plane_x * sin(rot_speed) + data->cast.plane_y * cos(rot_speed);
 	}
-	else if (keysym == XK_s)
-	{
-		printf("Keypress 's' (backward)\n");
-	}
-	else if (keysym == XK_d)
+	else if (keysym == RIGHT_ARROW)
 	{
 		printf("Keypress 'd' (rotate right)\n");
 		double old_dir_x = data->cast.dir_x;
