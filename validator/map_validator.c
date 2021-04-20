@@ -110,7 +110,7 @@ static int	check_surrounding(char **map, int pos_x, int pos_y, int *pos_cnt)
 	return (0);
 }
 
-int	map_validator(char ***map)
+int	map_validator(t_des *desc)
 {
 	int	x_max;
 	int	y_max;
@@ -121,20 +121,20 @@ int	map_validator(char ***map)
 	x_max = 0;
 	y_max = 0;
 	pos_cnt = 0;
-	if (map_squarer(map, &x_max, &y_max))
+	if (map_squarer(&desc->map, &x_max, &y_max))
 		return (1);
-	if (outer_validation(*map, x_max, y_max))
+	if (outer_validation(desc->map, x_max, y_max))
 		return (1);
 	y_index = 0;
 	while (++y_index < (y_max - 1))
 	{
 		x_index = 0;
 		while (++x_index < (x_max - 1))
-			if (check_surrounding(*map, x_index, y_index, &pos_cnt))
+			if (check_surrounding(desc->map, x_index, y_index, &pos_cnt))
 				return (1);
 	}
 	if (pos_cnt != 1)
 		return (1);
-	replace_spaces(map);
+	replace_spaces(desc);
 	return (0);
 }
