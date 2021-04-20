@@ -327,14 +327,12 @@ int handle_keypress(int keysym, t_data *data)
 	else if (keysym == XK_a)
 	{
 		printf("Keypress 'a' (rotate left)\n");
-		/*double old_dir_x = data->cast.dir_x;
+		double old_dir_x = data->cast.dir_x;
 		data->cast.dir_x = data->cast.dir_x * cos(rot_speed) - data->cast.dir_y * sin(rot_speed);
-		printf("Old = [%f] new = [%f]\n", old_dir_x, data->cast.dir_x);
-		data->cast.dir_y = old_dir_x * sin(-rot_speed) + data->cast.dir_y * cos(-rot_speed);
+		data->cast.dir_y = old_dir_x * sin(rot_speed) + data->cast.dir_y * cos(rot_speed);
 		double old_plane_x = data->cast.plane_x;
 		data->cast.plane_x = data->cast.plane_x * cos(rot_speed) - data->cast.plane_y * sin(rot_speed);
 		data->cast.plane_y = old_plane_x * sin(rot_speed) + data->cast.plane_y * cos(rot_speed);
-		render_map(data);*/
 	}
 	else if (keysym == XK_s)
 	{
@@ -345,11 +343,9 @@ int handle_keypress(int keysym, t_data *data)
 		printf("Keypress 'd' (rotate right)\n");
 		double old_dir_x = data->cast.dir_x;
 		data->cast.dir_x = data->cast.dir_x * cos(-rot_speed) - data->cast.dir_y * sin(-rot_speed);
-		printf("Old = [%f] new = [%f]\n", old_dir_x, data->cast.dir_x);
 		data->cast.dir_y = old_dir_x * sin(-rot_speed) + data->cast.dir_y * cos(-rot_speed);
 		double old_plane_x = data->cast.plane_x;
 		data->cast.plane_x = data->cast.plane_x * cos(-rot_speed) - data->cast.plane_y * sin(-rot_speed);
-		printf("Old = [%f] new = [%f]\n", old_plane_x, data->cast.plane_x);
 		data->cast.plane_y = old_plane_x * sin(-rot_speed) + data->cast.plane_y * cos(-rot_speed);
 	}
 	return (0);
