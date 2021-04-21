@@ -19,40 +19,40 @@ int handle_keypress(int keysym, t_data *data)
 		printf("Keypress 'w' (forward)\n");
 		int next_x = (int)(data->cast.pos_x + data->cast.dir_x * move_speed);
 		int next_y = (int)(data->cast.pos_y + data->cast.dir_y * move_speed);
-		if (world_map[next_x][(int)(data->cast.pos_y)] == (int)'0')
-			data->cast.pos_x = next_x;
-		if (world_map[(int)(data->cast.pos_x)][next_y] == (int)'0')
-			data->cast.pos_y = next_y;
+		if (world_map[next_x][(int)(data->cast.pos_y)] == '0')
+			data->cast.pos_x += data->cast.dir_x * move_speed;
+		if (world_map[(int)(data->cast.pos_x)][next_y] == '0')
+			data->cast.pos_y += data->cast.dir_y * move_speed;
 	}
 	else if (keysym == KEY_S)
 	{
 		printf("Keypress 's' (backward)\n");
 		int next_x = (int)(data->cast.pos_x - data->cast.dir_x * move_speed);
 		int next_y = (int)(data->cast.pos_y - data->cast.dir_y * move_speed);
-		if (world_map[next_x][(int)(data->cast.pos_y)] == (int)'0')
-			data->cast.pos_x = next_x;
-		if (world_map[(int)(data->cast.pos_x)][next_y] == (int)'0')
-			data->cast.pos_y = next_y;
+		if (world_map[next_x][(int)(data->cast.pos_y)] == '0')
+			data->cast.pos_x -= data->cast.dir_x * move_speed;
+		if (world_map[(int)(data->cast.pos_x)][next_y] == '0')
+			data->cast.pos_y -= data->cast.dir_y * move_speed;
 	}
 	else if (keysym == KEY_A)
 	{
 		printf("Keypress 'a' (left)\n");
 		int next_x = (int)(data->cast.pos_x - data->cast.dir_y * move_speed);
 		int next_y = (int)(data->cast.pos_y + data->cast.dir_x * move_speed);
-		if (world_map[next_x][(int)(data->cast.pos_y)] == (int)'0')
-			data->cast.pos_x = next_x;
-		if (world_map[(int)(data->cast.pos_x)][next_y] == (int)'0')
-			data->cast.pos_y = next_y;
+		if (world_map[next_x][(int)(data->cast.pos_y)] == '0')
+			data->cast.pos_x -= data->cast.dir_y * move_speed;
+		if (world_map[(int)(data->cast.pos_x)][next_y] == '0')
+			data->cast.pos_y += data->cast.dir_x * move_speed;
 	}
 	else if (keysym == KEY_D)
 	{
 		printf("Keypress 'd' (right)\n");
 		int next_x = (int)(data->cast.pos_x + data->cast.dir_y * move_speed);
 		int next_y = (int)(data->cast.pos_y - data->cast.dir_x * move_speed);
-		if (world_map[next_x][(int)(data->cast.pos_y)] == (int)'0')
-			data->cast.pos_x = next_x;
-		if (world_map[(int)(data->cast.pos_x)][next_y] == (int)'0')
-			data->cast.pos_y = next_y;
+		if (world_map[next_x][(int)(data->cast.pos_y)] == '0')
+			data->cast.pos_x += data->cast.dir_y * move_speed;
+		if (world_map[(int)(data->cast.pos_x)][next_y] == '0')
+			data->cast.pos_y -= data->cast.dir_x * move_speed;
 	}
 	else if (keysym == LEFT_ARROW)
 	{
