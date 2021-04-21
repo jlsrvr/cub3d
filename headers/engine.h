@@ -29,9 +29,14 @@ typedef struct s_ray
         int x;
         int y_start;
         int y_end;
-        int color;
-
 }       t_ray;
+
+typedef struct s_texture
+{
+	t_img img;
+	int tex_width;
+	int tex_height;
+} t_texture;
 
 typedef struct s_cast
 {
@@ -89,6 +94,7 @@ typedef struct s_data
         t_cast  cast;
         t_img   img;
         t_des 	*desc;
+		t_texture textures[5];
 
 }       t_data;
 
