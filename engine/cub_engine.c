@@ -168,14 +168,56 @@ static void def_line_start_end(t_cast *cast)
 			cast->draw_end = cast->height - 1;
 }
 
+static int define_texture(t_cast cast)
+{
+	int side;
+	double ray_dir;
+
+	ray_dir = cast.ray_dir_y;
+	side = cast.side;
+	if (side == 1)
+	{
+		if (ray_dir >= 0)
+			return (3);
+		return (2);
+	}
+	ray_dir = cast.ray_dir_x;
+	if (ray_dir >= 0)
+		return (1);
+	return (0);
+}
+
 int render_ray(t_data *data, t_ray ray)
 {
 	int y;
+	int tex_index;
+	double  wall_x;
 
+	tex_index = define_texture(data->cast);
+	if (data->cast.side == 0)
+		wall_x = data->cast.pos_y + data->cast.perp_wall_dist * data->cast.ray_dir_y;
+	else
+		wall_x = data->cast.pos_x + data->cast.perp_wall_dist * data->cast.ray_dir_x;
+	wall_x -= floor(wall_x);
+	int tex_x;
+	int tex_width;
+	tex_width = data->textures[tex_index].tex_width;
+	tex_x = (int)(wall_x * (double)tex_width);
+	if ((data->cast.side == 0 && data->cast.ray_dir_x > 0) || (data->cast.side == 1 && data->cast.ray_dir_x < 0))
+		tex_x = tex_width - tex_x - 1;
+	int tex_height;
+	tex_height = data->textures[tex_index].tex_height;
+	double step;
+	step = 1.0 * tex_height / data->cast.line_height;
+	double tex_pos;
+	tex_pos = (ray.y_start - data->cast.height / 2 + data->cast.line_height / 2) * step;
 	y = ray.y_start;
 	while (y < ray.y_end)
 	{
-		img_pix_put(&data->img, ray.x, y, 0xFF0000);
+		int tex_y;
+		tex_y = (int)tex_pos & (tex_height - 1);
+		tex_pos += step;
+		img_pix_put(&data->img, ray.x, y, data->textures[tex_index].img.addr[tex_height * tex_x + tex_y]);
 		y++;
 	}
 	return (0);
