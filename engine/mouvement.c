@@ -4,9 +4,25 @@
 
 #include "engine.h"
 
+static void rotate_player(char dir, t_cast *cast)
+{
+	double old_dir_x;
+	double old_plane_x;
+	double rot_speed;
+
+	old_dir_x = cast->dir_x;
+	old_plane_x = cast->plane_x;
+	rot_speed = 0.3;
+	if (dir == 'R')
+		rot_speed *= -1;
+	cast->dir_x = cast->dir_x * cos(rot_speed) - cast->dir_y * sin(rot_speed);
+	cast->dir_y = old_dir_x * sin(rot_speed) + cast->dir_y * cos(rot_speed);
+	cast->plane_x = cast->plane_x * cos(rot_speed) - cast->plane_y * sin(rot_speed);
+	cast->plane_y = old_plane_x * sin(rot_speed) + cast->plane_y * cos(rot_speed);
+}
+
 int handle_keypress(int keysym, t_data *data)
 {
-	double rot_speed = 0.3;
 	double move_speed = 0.5;
 	char **world_map = data->desc->map;
 	t_cast *cast = &data->cast;
@@ -59,24 +75,8 @@ int handle_keypress(int keysym, t_data *data)
 			cast->pos_y -= cast->dir_x * move_speed;
 	}
 	else if (keysym == LEFT_ARROW)
-	{
-		printf("Keypress 'a' (rotate left)\n");
-		double old_dir_x = data->cast.dir_x;
-		data->cast.dir_x = data->cast.dir_x * cos(rot_speed) - data->cast.dir_y * sin(rot_speed);
-		data->cast.dir_y = old_dir_x * sin(rot_speed) + data->cast.dir_y * cos(rot_speed);
-		double old_plane_x = data->cast.plane_x;
-		data->cast.plane_x = data->cast.plane_x * cos(rot_speed) - data->cast.plane_y * sin(rot_speed);
-		data->cast.plane_y = old_plane_x * sin(rot_speed) + data->cast.plane_y * cos(rot_speed);
-	}
+		rotate_player('L', cast);
 	else if (keysym == RIGHT_ARROW)
-	{
-		printf("Keypress 'd' (rotate right)\n");
-		double old_dir_x = data->cast.dir_x;
-		data->cast.dir_x = data->cast.dir_x * cos(-rot_speed) - data->cast.dir_y * sin(-rot_speed);
-		data->cast.dir_y = old_dir_x * sin(-rot_speed) + data->cast.dir_y * cos(-rot_speed);
-		double old_plane_x = data->cast.plane_x;
-		data->cast.plane_x = data->cast.plane_x * cos(-rot_speed) - data->cast.plane_y * sin(-rot_speed);
-		data->cast.plane_y = old_plane_x * sin(-rot_speed) + data->cast.plane_y * cos(-rot_speed);
-	}
+		rotate_player('R', cast);
 	return (0);
 }
