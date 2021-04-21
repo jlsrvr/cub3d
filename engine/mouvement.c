@@ -4,6 +4,31 @@
 
 #include "engine.h"
 
+static void move_left_right(char dir, t_cast *cast, char **map, double move_speed)
+{
+	int next_x;
+	int next_y;
+
+	if (dir == 'L')
+	{
+		next_x = (int)(cast->pos_x - cast->dir_y * move_speed);
+		next_y = (int)(cast->pos_y + cast->dir_x * move_speed);
+		if (map[next_x][(int)(cast->pos_y)] == '0')
+			cast->pos_x -= cast->dir_y * move_speed;
+		if (map[(int)(cast->pos_x)][next_y] == '0')
+			cast->pos_y += cast->dir_x * move_speed;
+	}
+	if (dir == 'R')
+	{
+		next_x = (int)(cast->pos_x + cast->dir_y * move_speed);
+		next_y = (int)(cast->pos_y - cast->dir_x * move_speed);
+		if (map[next_x][(int)(cast->pos_y)] == '0')
+			cast->pos_x += cast->dir_y * move_speed;
+		if (map[(int)(cast->pos_x)][next_y] == '0')
+			cast->pos_y -= cast->dir_x * move_speed;
+	}
+}
+
 static void rotate_player(char dir, t_cast *cast)
 {
 	double old_dir_x;
@@ -57,22 +82,12 @@ int handle_keypress(int keysym, t_data *data)
 	else if (keysym == KEY_A)
 	{
 		printf("Keypress 'a' (left)\n");
-		int next_x = (int)(cast->pos_x - cast->dir_y * move_speed);
-		int next_y = (int)(cast->pos_y + cast->dir_x * move_speed);
-		if (world_map[next_x][(int)(cast->pos_y)] == '0')
-			cast->pos_x -= cast->dir_y * move_speed;
-		if (world_map[(int)(cast->pos_x)][next_y] == '0')
-			cast->pos_y += cast->dir_x * move_speed;
+		move_left_right('L', cast, world_map, move_speed);
 	}
 	else if (keysym == KEY_D)
 	{
 		printf("Keypress 'd' (right)\n");
-		int next_x = (int)(cast->pos_x + cast->dir_y * move_speed);
-		int next_y = (int)(cast->pos_y - cast->dir_x * move_speed);
-		if (world_map[next_x][(int)(cast->pos_y)] == '0')
-			cast->pos_x += cast->dir_y * move_speed;
-		if (world_map[(int)(cast->pos_x)][next_y] == '0')
-			cast->pos_y -= cast->dir_x * move_speed;
+		move_left_right('R', cast, world_map, move_speed);
 	}
 	else if (keysym == LEFT_ARROW)
 		rotate_player('L', cast);
