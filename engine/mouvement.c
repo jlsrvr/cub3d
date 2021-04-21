@@ -4,27 +4,56 @@
 
 #include "engine.h"
 
-static void move_left_right(char dir, t_cast *cast, char **map, double move_speed)
+static void move_forward_backward(char dir, t_cast *cast, char **map, double move_speed)
 {
+	int inverser;
 	int next_x;
 	int next_y;
 
-	if (dir == 'L')
+	inverser = 1;
+	if (dir == 'B')
+		inverser *= -1;
+	next_x = (int)(cast->pos_x + (inverser * cast->dir_x * move_speed));
+	next_y = (int)(cast->pos_y + (inverser * cast->dir_y * move_speed));
+	if (map[next_x][(int)(cast->pos_y)] == '0')
 	{
-		next_x = (int)(cast->pos_x - cast->dir_y * move_speed);
-		next_y = (int)(cast->pos_y + cast->dir_x * move_speed);
-		if (map[next_x][(int)(cast->pos_y)] == '0')
-			cast->pos_x -= cast->dir_y * move_speed;
-		if (map[(int)(cast->pos_x)][next_y] == '0')
-			cast->pos_y += cast->dir_x * move_speed;
+		if (dir == 'F')
+			cast->pos_x += cast->dir_x * move_speed;
+		if (dir == 'B')
+			cast->pos_x -= cast->dir_x * move_speed;
 	}
-	if (dir == 'R')
+	if (map[(int)(cast->pos_x)][next_y] == '0')
 	{
-		next_x = (int)(cast->pos_x + cast->dir_y * move_speed);
-		next_y = (int)(cast->pos_y - cast->dir_x * move_speed);
-		if (map[next_x][(int)(cast->pos_y)] == '0')
+		if (dir == 'F')
+			cast->pos_y += cast->dir_y * move_speed;
+		if (dir == 'B')
+			cast->pos_y -= cast->dir_y * move_speed;
+	}
+}
+
+static void move_left_right(char dir, t_cast *cast, char **map, double move_speed)
+{
+	int inverser;
+	int next_x;
+	int next_y;
+
+	inverser = 1;
+	if (dir == 'R')
+		inverser *= -1;
+	next_x = (int)(cast->pos_x - (inverser * cast->dir_y * move_speed));
+	next_y = (int)(cast->pos_y + (inverser * cast->dir_x * move_speed));
+	if (map[next_x][(int)(cast->pos_y)] == '0')
+	{
+		if (dir == 'L')
+			cast->pos_x -= cast->dir_y * move_speed;
+		if (dir == 'R')
 			cast->pos_x += cast->dir_y * move_speed;
-		if (map[(int)(cast->pos_x)][next_y] == '0')
+	}
+	if (map[(int)(cast->pos_x)][next_y] == '0')
+	{
+		if (dir == 'L')
+			cast->pos_y += cast->dir_x * move_speed;
+		if (dir == 'R')
 			cast->pos_y -= cast->dir_x * move_speed;
 	}
 }
@@ -60,35 +89,13 @@ int handle_keypress(int keysym, t_data *data)
 		data->win_ptr = NULL;
 	}
 	else if (keysym == KEY_W)
-	{
-		printf("Keypress 'w' (forward)\n");
-		int next_x = (int)(cast->pos_x + cast->dir_x * move_speed);
-		int next_y = (int)(cast->pos_y + cast->dir_y * move_speed);
-		if (world_map[next_x][(int)(cast->pos_y)] == '0')
-			cast->pos_x += cast->dir_x * move_speed;
-		if (world_map[(int)(cast->pos_x)][next_y] == '0')
-			cast->pos_y += cast->dir_y * move_speed;
-	}
+		move_forward_backward('F', cast, world_map, move_speed);
 	else if (keysym == KEY_S)
-	{
-		printf("Keypress 's' (backward)\n");
-		int next_x = (int)(cast->pos_x - cast->dir_x * move_speed);
-		int next_y = (int)(cast->pos_y - cast->dir_y * move_speed);
-		if (world_map[next_x][(int)(cast->pos_y)] == '0')
-			cast->pos_x -= cast->dir_x * move_speed;
-		if (world_map[(int)(cast->pos_x)][next_y] == '0')
-			cast->pos_y -= cast->dir_y * move_speed;
-	}
+		move_forward_backward('B', cast, world_map, move_speed);
 	else if (keysym == KEY_A)
-	{
-		printf("Keypress 'a' (left)\n");
 		move_left_right('L', cast, world_map, move_speed);
-	}
 	else if (keysym == KEY_D)
-	{
-		printf("Keypress 'd' (right)\n");
 		move_left_right('R', cast, world_map, move_speed);
-	}
 	else if (keysym == LEFT_ARROW)
 		rotate_player('L', cast);
 	else if (keysym == RIGHT_ARROW)
