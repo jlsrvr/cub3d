@@ -41,10 +41,8 @@ void	img_pix_put(t_img *img, int x, int y, int color)
 	pixel = img->addr + pix_pos;
 	while (i >= 0)
 	{
-		/* big endian, MSB is the leftmost bit */
 		if (img->endian != 0)
 			*pixel++ = (color >> i) & 0xFF;
-		/* little endian, LSB is the leftmost bit */
 		else
 			*pixel++ = (color >> (img->bpp - 8 - i)) & 0xFF;
 		i -= 8;
@@ -206,13 +204,12 @@ static int raycaster(t_data *data)
 	return (0);
 }
 
-int render_map(t_data *data)
+static int render_map(t_data *data)
 {
-
 	if (data->win_ptr == NULL)
 		return (1);
-	render_rect(&data->img, (t_rect){0, WIN_Y * 0.5, WIN_X, WIN_Y / 2, data->desc->floor_c}); //floor data->description->floor_c
-	render_rect(&data->img, (t_rect){0, 0, WIN_X, WIN_Y / 2, data->desc->ceiling_c}); //ceiling
+	render_rect(&data->img, (t_rect){0, WIN_Y * 0.5, WIN_X, WIN_Y / 2, data->desc->floor_c}); //data->description.res
+	render_rect(&data->img, (t_rect){0, 0, WIN_X, WIN_Y / 2, data->desc->ceiling_c}); //data->description.res
 	raycaster(data);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
 	return (0);
@@ -223,7 +220,7 @@ int cub_engine(t_des *description)
 	t_data data;
 
 	data.desc = description;
-	data.mlx_ptr = mlx_init();
+	data.mlx_ptr = mlx_init(); //protect this form being NULL
 	data.win_ptr = mlx_new_window(data.mlx_ptr, WIN_X, WIN_Y, "Jules' Cub3D");
 	data.img.mlx_img = mlx_new_image(data.mlx_ptr, WIN_X, WIN_Y);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
