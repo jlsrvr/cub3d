@@ -193,12 +193,7 @@ static int raycaster(t_data *data)
 		calculate_distance_to_wall(&cast);
 		cast.line_height = (int)(cast.height / cast.perp_wall_dist);
 		def_line_start_end(&cast);
-		cast.colour = RED_PIXEL;
-		if (cast.side == 1)
-		{
-			cast.colour = 0x920000;
-		}
-		render_ray(&data->img, (t_ray){x, cast.draw_start, cast.draw_end, cast.colour});
+		render_ray(&data->img, data->structures, (t_ray){x, cast.draw_start, cast.draw_end});
 		x++;
 	}
 	return (0);
@@ -221,9 +216,24 @@ int cub_engine(t_des *description)
 
 	data.desc = description;
 	data.mlx_ptr = mlx_init(); //protect this form being NULL
-	data.win_ptr = mlx_new_window(data.mlx_ptr, WIN_X, WIN_Y, "Jules' Cub3D");
-	data.img.mlx_img = mlx_new_image(data.mlx_ptr, WIN_X, WIN_Y);
-	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);
+
+	data.win_ptr = mlx_new_window(data.mlx_ptr, WIN_X, WIN_Y, "Jules' Cub3D");//protect this form being NULL
+
+	data.img.mlx_img = mlx_new_image(data.mlx_ptr, WIN_X, WIN_Y);//protect this form being NULL
+	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);//protect this form being NULL
+
+	data.textures[0].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.description->no_path, &data.textures[0].tex_width, &data.textures[0].tex_height);//protect this form being NULL
+	data.textures[0].img.addr = mlx_get_data_addr(data.textures[0].img.mlx_img, &data.textures[0].img.bpp, &data.textures[0].img.line_len, &data.textures[0].img.endian);//protect this form being NULL
+
+	data.textures[1].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.description->ea_path, &data.textures[1].tex_width, &data.textures[1].tex_height);//protect this form being NULL
+	data.textures[1].img.addr = mlx_get_data_addr(data.textures[1].img.mlx_img, &data.textures[1].img.bpp, &data.textures[1].img.line_len, &data.textures[1].img.endian);//protect this form being NULL
+
+	data.textures[2].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.description->so_path, &data.textures[2].tex_width, &data.textures[2].tex_height);//protect this form being NULL
+	data.textures[2].img.addr = mlx_get_data_addr(data.textures[2].img.mlx_img, &data.textures[2].img.bpp, &data.textures[2].img.line_len, &data.textures[2].img.endian);//protect this form being NULL
+
+	data.textures[3].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.description->we_path, &data.textures[3].tex_width, &data.textures[3].tex_height);//protect this form being NULL
+	data.textures[3].img.addr = mlx_get_data_addr(data.textures[3].img.mlx_img, &data.textures[3].img.bpp, &data.textures[3].img.line_len, &data.textures[3].img.endian);//protect this form being NULL
+
 	init_raycaster(&data.cast, description);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
 	mlx_loop_hook(data.mlx_ptr, &render_map, &data);
