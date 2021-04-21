@@ -1,9 +1,9 @@
 R 1920 1080
 
-NO ../specs/files/test.xpm
-EA ../specs/files/test.xpm
-SO ../specs/files/test.xpm
-WE ../specs/files/test.xpm
+NO ./textures/brick.xpm
+EA ./textures/grass.xpm
+SO ./textures/stone.xpm
+WE ./textures/wood.xpm
 S ../specs/files/test.xpm
 
 F 2,237,0
