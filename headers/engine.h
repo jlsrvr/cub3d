@@ -31,13 +31,6 @@ typedef struct s_ray
         int y_end;
 }       t_ray;
 
-typedef struct s_texture
-{
-	t_img img;
-	int tex_width;
-	int tex_height;
-} t_texture;
-
 typedef struct s_cast
 {
         int width;
@@ -86,6 +79,13 @@ typedef struct s_img
         int             line_len;
         int             endian;
 }       t_img;
+
+typedef struct s_texture
+{
+	t_img img;
+	int tex_width;
+	int tex_height;
+} t_texture;
 
 typedef struct s_data
 {
