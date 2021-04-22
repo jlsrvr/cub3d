@@ -18,7 +18,7 @@ void	skip_space(char **line)
 		(*line)++;
 }
 
-int	count_words(char **words)
+int		count_words(char **words)
 {
 	int	count;
 
@@ -28,7 +28,7 @@ int	count_words(char **words)
 	return (count);
 }
 
-int	parse_number(char *number)
+int		parse_number(char *number)
 {
 	int	num;
 	int	digit;
@@ -51,7 +51,7 @@ int	parse_number(char *number)
 	return (num);
 }
 
-int	init_description(t_des **to_fill)
+int		init_description(t_des **to_fill)
 {
 	*to_fill = malloc(sizeof(**to_fill));
 	if (!*to_fill)
@@ -73,7 +73,7 @@ int	init_description(t_des **to_fill)
 	return (0);
 }
 
-int	validate_map_line(char *line, t_des *to_fill)
+int		validate_map_line(char *line, t_des *to_fill)
 {
 	int	index;
 	int	filled;

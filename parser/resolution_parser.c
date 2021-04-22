@@ -61,7 +61,7 @@ static int	check_split(char **numbers, int *first_index, int *last_index)
 	return (0);
 }
 
-int	resolution_parser(char **line, t_des *description)
+int			resolution_parser(char **line, t_des *description)
 {
 	int		first_int;
 	int		sec_int;

@@ -62,7 +62,7 @@ static int	check_line(char **line)
 	return (0);
 }
 
-int	map_parser(char **line, t_des *description)
+int			map_parser(char **line, t_des *description)
 {
 	char	**new;
 	int		index;
