@@ -100,6 +100,7 @@ typedef struct s_data
 }       t_data;
 
 void	img_pix_put(t_img *img, int x, int y, int color);
+void render_rect(t_img *img, t_rect rect);
 
 int	handle_keypress(int keysym, t_data *data);
 #endif
