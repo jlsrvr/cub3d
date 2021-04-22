@@ -8,69 +8,6 @@
 #define WIN_X 1200
 #define WIN_Y 800
 
-double set_delta_dist(double ray_dir, double ray_dir_other)
-{
-	double delta_dist;
-
-	delta_dist = 0;
-	if (ray_dir_other != 0)
-	{
-		delta_dist = 1;
-		if (ray_dir != 0)
-			delta_dist = fabs(1 / ray_dir);
-	}
-	return (delta_dist);
-}
-
-static void init_raycaster(t_cast *cast, t_des *desc)
-{
-	cast->width = WIN_X;// = description->player_resolution
-	cast->height = WIN_Y;// = description->player_resolution
-	cast->pos_x = desc->pos_x;
-	cast->pos_y = desc->pos_y;
-	cast->dir_x = desc->dir_x;
-	cast->dir_y = desc->dir_y;
-	cast->plane_x = cast->dir_y * 0.66;
-	cast->plane_y = cast->dir_x * -0.66;
-}
-
-static void calculate_step(int *step, double ray_dir)
-{
-	int ret;
-
-	ret = 1;
-	if (ray_dir < 0)
-		ret = -1;
-	*step = ret;
-}
-
-static void calculate_side_dist(t_cast *cast)
-{
-	if (cast->ray_dir_x < 0)
-		cast->side_dist_x = (cast->pos_x - cast->map_x) * cast->delta_dist_x;
-	else
-		cast->side_dist_x = (cast->map_x + 1.0 - cast->pos_x) * cast->delta_dist_x;
-	if (cast->ray_dir_y < 0)
-		cast->side_dist_y = (cast->pos_y - cast->map_y) * cast->delta_dist_y;
-	else
-		cast->side_dist_y = (cast->map_y + 1.0 - cast->pos_y) * cast->delta_dist_y;
-}
-
-static void init_raycaster_loop(t_cast *cast, int x, int w)
-{
-	cast->camera_x = 2 * x / (double)w - 1;
-	cast->ray_dir_x = cast->dir_x + (cast->plane_x * cast->camera_x);
-	cast->ray_dir_y= cast->dir_y + (cast->plane_y * cast->camera_x);
-	cast->map_x = (int)cast->pos_x;
-	cast->map_y = (int)cast->pos_y;
-	cast->delta_dist_x = set_delta_dist(cast->ray_dir_x, cast->ray_dir_y);
-	cast->delta_dist_y = set_delta_dist(cast->ray_dir_y, cast->ray_dir_x);
-	cast->hit = 0;
-	calculate_step(&cast->step_x, cast->ray_dir_x);
-	calculate_step(&cast->step_y, cast->ray_dir_y);
-	calculate_side_dist(cast);
-}
-
 static void cast_ray(t_cast *cast, t_des *desc)
 {
 	while (cast->hit == 0)
@@ -190,10 +127,15 @@ static int raycaster(t_data *data)
 
 static int render_view(t_data *data)
 {
+	int win_x;
+	int win_y;
+
 	if (data->win_ptr == NULL)
 		return (1);
-	render_rect(&data->img, (t_rect){0, WIN_Y * 0.5, WIN_X, WIN_Y / 2, data->desc->floor_c}); //data->description.res
-	render_rect(&data->img, (t_rect){0, 0, WIN_X, WIN_Y / 2, data->desc->ceiling_c}); //data->description.res
+	win_x = data->desc->x_res;
+	win_y = data->desc->y_res;
+	render_rect(&data->img, (t_rect){0, win_y * 0.5, win_x, win_y / 2, data->desc->floor_c}); //data->description.res
+	render_rect(&data->img, (t_rect){0, 0, win_x, win_y / 2, data->desc->ceiling_c}); //data->description.res
 	raycaster(data);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
 	return (0);
@@ -202,11 +144,15 @@ static int render_view(t_data *data)
 int cub_engine(t_des *description)
 {
 	t_data data;
+	int win_x;
+	int win_y;
 
+	win_x = description->x_res;
+	win_y = description->y_res;
 	data.desc = description;
 	data.mlx_ptr = mlx_init(); //protect this form being NULL
-	data.win_ptr = mlx_new_window(data.mlx_ptr, WIN_X, WIN_Y, "Jules' Cub3D");//protect this form being NULL
-	data.img.mlx_img = mlx_new_image(data.mlx_ptr, WIN_X, WIN_Y);//protect this form being NULL
+	data.win_ptr = mlx_new_window(data.mlx_ptr, win_x, win_y, "Jules' Cub3D");//protect this form being NULL
+	data.img.mlx_img = mlx_new_image(data.mlx_ptr, win_x, win_y);//protect this form being NULL
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);//protect this form being NULL
 	data.textures[0].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.desc->no_path, &data.textures[0].width, &data.textures[0].height);//protect this form being NULL
 	data.textures[0].addr = (int *)mlx_get_data_addr(data.textures[0].img.mlx_img, &data.textures[0].img.bpp, &data.textures[0].img.line_len, &data.textures[0].img.endian);//protect this form being NULL
