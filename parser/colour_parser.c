@@ -77,7 +77,7 @@ static int	check_line(char *line)
 	return (commas - 2);
 }
 
-int	colour_parser(char **line, t_des *description)
+int			colour_parser(char **line, t_des *description)
 {
 	int		index;
 	int		**dest;

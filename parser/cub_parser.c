@@ -75,7 +75,7 @@ static int	dispatch_map(char *line, t_des **to_fill)
 	return (0);
 }
 
-int	cub_parser(int fd, t_des **to_fill)
+int			cub_parser(int fd, t_des **to_fill)
 {
 	int		gnl;
 	int		cnt_elems;

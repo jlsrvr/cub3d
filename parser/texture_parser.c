@@ -53,7 +53,7 @@ static char	***build_dest(t_des *description)
 	return (dest);
 }
 
-int	texture_parser(char **line, t_des *description)
+int			texture_parser(char **line, t_des *description)
 {
 	int		index;
 	char	***dest;
