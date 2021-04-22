@@ -27,7 +27,7 @@
 # define BLINK	"\e[5m"
 # define RESET  "\e[0m"
 
-typedef struct s_description
+typedef struct	s_description
 {
 	int		x_res;
 	int		y_res;
