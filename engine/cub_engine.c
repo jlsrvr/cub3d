@@ -4,49 +4,6 @@
 
 #include "engine.h"
 
-#define RED_PIXEL 0xFF0000
-#define WIN_X 1200
-#define WIN_Y 800
-
-static void cast_ray(t_cast *cast, t_des *desc)
-{
-	while (cast->hit == 0)
-	{
-		if (cast->side_dist_x < cast->side_dist_y)
-		{
-			cast->side_dist_x += cast->delta_dist_x;
-			cast->map_x += cast->step_x;
-			cast->side = 0;
-		}
-		else
-		{
-			cast->side_dist_y += cast->delta_dist_y;
-			cast->map_y += cast->step_y;
-			cast->side = 1;
-		}
-		if (desc->map[cast->map_x][cast->map_y] > '0')/// Worth trying with == '1'
-			cast->hit = 1;
-	}
-}
-
-static void calculate_distance_to_wall(t_cast *cast)
-{
-		if (cast->side == 0)
-			cast->perp_wall_dist = (cast->map_x - cast->pos_x + (1 - cast->step_x) / 2) / cast->ray_dir_x;
-		else
-			cast->perp_wall_dist = (cast->map_y - cast->pos_y + (1 - cast->step_y) / 2) / cast->ray_dir_y;
-}
-
-static void def_line_start_end(t_cast *cast)
-{
-		cast->draw_start = -cast->line_height / 2 + cast->height / 2;
-		if (cast->draw_start < 0)
-			cast->draw_start = 0;
-		cast->draw_end = cast->line_height / 2 + cast->height / 2;
-		if (cast->draw_end >= cast->height)
-			cast->draw_end = cast->height - 1;
-}
-
 static int define_texture(t_cast *cast)
 {
 	int side;
@@ -118,7 +75,7 @@ static int raycaster(t_data *data)
 		cast_ray(cast, data->desc);
 		calculate_distance_to_wall(cast);
 		cast->line_height = (int)(cast->height / cast->perp_wall_dist);
-		def_line_start_end(cast);
+		define_line_start_end(cast);
 		render_ray(data, (t_ray){x, cast->draw_start, cast->draw_end});
 		x++;
 	}
