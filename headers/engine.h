@@ -108,13 +108,14 @@ typedef struct s_data
 
 }       t_data;
 
+int		destroy_mlx_resources(t_data *data);
+int		handle_keypress(int keysym, t_data *data);
+void	calculate_distance_to_wall(t_cast *cast);
+void	cast_ray(t_cast *cast, t_des *desc);
+void	define_line_start_end(t_cast *cast);
 void	img_pix_put(t_img *img, int x, int y, int color);
-void render_rect(t_img *img, t_rect rect);
-void init_raycaster(t_cast *cast, t_des *desc);
-void init_raycaster_loop(t_cast *cast, int x, int w);
-void cast_ray(t_cast *cast, t_des *desc);
-void calculate_distance_to_wall(t_cast *cast);
-void define_line_start_end(t_cast *cast);
-void render_ray(t_data *data, t_ray ray);
-int	handle_keypress(int keysym, t_data *data);
+void	init_raycaster(t_cast *cast, t_des *desc);
+void	init_raycaster_loop(t_cast *cast, int x, int w);
+void 	render_ray(t_data *data, t_ray ray);
+void	render_rect(t_img *img, t_rect rect);
 #endif
