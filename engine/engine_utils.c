@@ -1,10 +1,20 @@
-////header///
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   engine_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/22 15:52:18 by jrivoire          #+#    #+#             */
+/*   Updated: 2021/04/22 16:05:06 by jrivoire         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "engine.h"
 
 void	img_pix_put(t_img *img, int x, int y, int color)
 {
-	char    *pixel;
+	char	*pixel;
 	int		pix_pos;
 	int		i;
 
@@ -21,7 +31,7 @@ void	img_pix_put(t_img *img, int x, int y, int color)
 	}
 }
 
-void render_rect(t_img *img, t_rect rect)
+void	render_rect(t_img *img, t_rect rect)
 {
 	int	i;
 	int j;
@@ -36,7 +46,7 @@ void render_rect(t_img *img, t_rect rect)
 	}
 }
 
-void cast_ray(t_cast *cast, t_des *desc)
+void	cast_ray(t_cast *cast, t_des *desc)
 {
 	while (cast->hit == 0)
 	{
@@ -57,21 +67,36 @@ void cast_ray(t_cast *cast, t_des *desc)
 	}
 }
 
-void calculate_distance_to_wall(t_cast *cast)
+void	calculate_distance_to_wall(t_cast *cast)
 {
-		if (cast->side == 0)
-			cast->perp_wall_dist = (cast->map_x - cast->pos_x + (1 - cast->step_x) / 2) / cast->ray_dir_x;
-		else
-			cast->perp_wall_dist = (cast->map_y - cast->pos_y + (1 - cast->step_y) / 2) / cast->ray_dir_y;
+	int		map_cor;
+	int		step;
+	double	pos;
+	double	ray_dir;
+
+	if (cast->side == 0)
+	{
+		map_cor = cast->map_x;
+		pos = cast->pos_x;
+		step = cast->step_x;
+		ray_dir = cast->ray_dir_x;
+	}
+	else
+	{
+		map_cor = cast->map_y;
+		pos = cast->pos_y;
+		step = cast->step_y;
+		ray_dir = cast->ray_dir_y;
+	}
+	cast->perp_wall_dist = (map_cor - pos + (1 - step) / 2) / ray_dir;
 }
 
-void define_line_start_end(t_cast *cast)
+void	define_line_start_end(t_cast *cast)
 {
-		cast->draw_start = -cast->line_height / 2 + cast->height / 2;
-		if (cast->draw_start < 0)
-			cast->draw_start = 0;
-		cast->draw_end = cast->line_height / 2 + cast->height / 2;
-		if (cast->draw_end >= cast->height)
-			cast->draw_end = cast->height - 1;
+	cast->draw_start = -cast->line_height / 2 + cast->height / 2;
+	if (cast->draw_start < 0)
+		cast->draw_start = 0;
+	cast->draw_end = cast->line_height / 2 + cast->height / 2;
+	if (cast->draw_end >= cast->height)
+		cast->draw_end = cast->height - 1;
 }
-
