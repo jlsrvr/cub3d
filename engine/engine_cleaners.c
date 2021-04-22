@@ -3,6 +3,8 @@
 //
 //
 //
+#include "engine.h"
+
 static void	destroy_mlx_image(void **ptr_to_ptr, void *mlx_ptr)
 {
 	if (!(*ptr_to_ptr))
