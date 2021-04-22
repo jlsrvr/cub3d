@@ -30,6 +30,7 @@ static void	free_description(t_des *description)
 			free(description->map[index]);
 		free(description->map);
 	}
+	free(description);
 }
 
 static int	pre_game_checks(char **av, int *fd, t_des **ptn_description)
