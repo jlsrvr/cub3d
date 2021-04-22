@@ -8,28 +8,6 @@
 #define WIN_X 1200
 #define WIN_Y 800
 
-int	handle_keyrelease(int keysym, void *data)
-{
-	(void)data;
-	if (keysym == KEY_W)
-	{
-		printf("Key release 'w' (forward)\n");
-	}
-	else if (keysym == KEY_A)
-	{
-		printf("Key release 'a' (rotate left)\n");
-	}
-	else if (keysym == KEY_S)
-	{
-		printf("Key release 's' (backward)\n");
-	}
-	else if (keysym == KEY_D)
-	{
-		printf("Key release 'd' (rotate right)\n");
-	}
-	return (0);
-}
-
 double set_delta_dist(double ray_dir, double ray_dir_other)
 {
 	double delta_dist;
@@ -210,7 +188,7 @@ static int raycaster(t_data *data)
 	return (0);
 }
 
-static int render_map(t_data *data)
+static int render_view(t_data *data)
 {
 	if (data->win_ptr == NULL)
 		return (1);
@@ -227,28 +205,20 @@ int cub_engine(t_des *description)
 
 	data.desc = description;
 	data.mlx_ptr = mlx_init(); //protect this form being NULL
-
 	data.win_ptr = mlx_new_window(data.mlx_ptr, WIN_X, WIN_Y, "Jules' Cub3D");//protect this form being NULL
-
 	data.img.mlx_img = mlx_new_image(data.mlx_ptr, WIN_X, WIN_Y);//protect this form being NULL
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);//protect this form being NULL
-
 	data.textures[0].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.desc->no_path, &data.textures[0].width, &data.textures[0].height);//protect this form being NULL
 	data.textures[0].addr = (int *)mlx_get_data_addr(data.textures[0].img.mlx_img, &data.textures[0].img.bpp, &data.textures[0].img.line_len, &data.textures[0].img.endian);//protect this form being NULL
-
 	data.textures[1].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.desc->ea_path, &data.textures[1].width, &data.textures[1].height);//protect this form being NULL
 	data.textures[1].addr = (int *)mlx_get_data_addr(data.textures[1].img.mlx_img, &data.textures[1].img.bpp, &data.textures[1].img.line_len, &data.textures[1].img.endian);//protect this form being NULL
-
 	data.textures[2].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.desc->so_path, &data.textures[2].width, &data.textures[2].height);//protect this form being NULL
 	data.textures[2].addr = (int *)mlx_get_data_addr(data.textures[2].img.mlx_img, &data.textures[2].img.bpp, &data.textures[2].img.line_len, &data.textures[2].img.endian);//protect this form being NULL
-
 	data.textures[3].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.desc->we_path, &data.textures[3].width, &data.textures[3].height);//protect this form being NULL
 	data.textures[3].addr = (int *)mlx_get_data_addr(data.textures[3].img.mlx_img, &data.textures[3].img.bpp, &data.textures[3].img.line_len, &data.textures[3].img.endian);//protect this form being NULL
-
 	init_raycaster(&data.cast, description);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
-	mlx_loop_hook(data.mlx_ptr, &render_map, &data);
-	mlx_hook(data.win_ptr, KeyRelease, KeyReleaseMask, &handle_keyrelease, &data);
+	mlx_loop_hook(data.mlx_ptr, &render_view, &data);
 	mlx_loop(data.mlx_ptr);
 	mlx_destroy_display(data.mlx_ptr);
 	free(data.mlx_ptr);
