@@ -168,20 +168,20 @@ static void def_line_start_end(t_cast *cast)
 			cast->draw_end = cast->height - 1;
 }
 
-static int define_texture(t_cast cast)
+static int define_texture(t_cast *cast)
 {
 	int side;
 	double ray_dir;
 
-	ray_dir = cast.ray_dir_y;
-	side = cast.side;
+	ray_dir = cast->ray_dir_y;
+	side = cast->side;
 	if (side == 1)
 	{
 		if (ray_dir >= 0)
 			return (3);
 		return (2);
 	}
-	ray_dir = cast.ray_dir_x;
+	ray_dir = cast->ray_dir_x;
 	if (ray_dir >= 0)
 		return (1);
 	return (0);
@@ -193,12 +193,12 @@ int render_ray(t_data *data, t_ray ray)
 	int tex_index;
 	double  wall_x;
 
-	tex_index = define_texture(data->cast);
+	tex_index = define_texture(&data->cast);
 	if (data->cast.side == 0)
 		wall_x = data->cast.pos_y + data->cast.perp_wall_dist * data->cast.ray_dir_y;
 	else
 		wall_x = data->cast.pos_x + data->cast.perp_wall_dist * data->cast.ray_dir_x;
-	wall_x -= floor(wall_x);
+	wall_x -= floor((wall_x));
 	int tex_x;
 	int tex_width;
 	tex_width = data->textures[tex_index].tex_width;
@@ -225,18 +225,18 @@ int render_ray(t_data *data, t_ray ray)
 
 static int raycaster(t_data *data)
 {
-	t_cast cast;
+	t_cast *cast;
 	int x = 0;
 
-	cast = data->cast;
-	while (x < cast.width)
+	cast = &data->cast;
+	while (x < cast->width)
 	{
-		init_raycaster_loop(&cast, x, cast.width);
-		cast_ray(&cast, data->desc);
-		calculate_distance_to_wall(&cast);
-		cast.line_height = (int)(cast.height / cast.perp_wall_dist);
-		def_line_start_end(&cast);
-		render_ray(data, (t_ray){x, cast.draw_start, cast.draw_end});
+		init_raycaster_loop(cast, x, cast->width);
+		cast_ray(cast, data->desc);
+		calculate_distance_to_wall(cast);
+		cast->line_height = (int)(cast->height / cast->perp_wall_dist);
+		def_line_start_end(cast);
+		render_ray(data, (t_ray){x, cast->draw_start, cast->draw_end});
 		x++;
 	}
 	return (0);
