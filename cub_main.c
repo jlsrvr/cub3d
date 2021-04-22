@@ -17,7 +17,7 @@ static int	free_description(t_des *description)
 	int	index;
 
 	if (!description)
-		return ;
+		return (1);
 	free(description->no_path);
 	free(description->ea_path);
 	free(description->so_path);
