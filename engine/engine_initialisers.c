@@ -1,9 +1,18 @@
-///HEaders///
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   engine_initialisers.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/22 15:43:39 by jrivoire          #+#    #+#             */
+/*   Updated: 2021/04/22 15:50:37 by jrivoire         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "engine.h"
 
-static double set_delta_dist(double ray_dir, double ray_dir_other)
+static double	set_delta_dist(double ray_dir, double ray_dir_other)
 {
 	double delta_dist;
 
@@ -17,7 +26,7 @@ static double set_delta_dist(double ray_dir, double ray_dir_other)
 	return (delta_dist);
 }
 
-static void calculate_step(int *step, double ray_dir)
+static void		calculate_step(int *step, double ray_dir)
 {
 	int ret;
 
@@ -27,19 +36,23 @@ static void calculate_step(int *step, double ray_dir)
 	*step = ret;
 }
 
-static void calculate_side_dist(t_cast *cast)
+static void		calculate_side_dist(t_cast *cast)
 {
+	double pos;
+
+	pos = cast->pos_x;
 	if (cast->ray_dir_x < 0)
-		cast->side_dist_x = (cast->pos_x - cast->map_x) * cast->delta_dist_x;
+		cast->side_dist_x = (pos - cast->map_x) * cast->delta_dist_x;
 	else
-		cast->side_dist_x = (cast->map_x + 1.0 - cast->pos_x) * cast->delta_dist_x;
+		cast->side_dist_x = (cast->map_x + 1.0 - pos) * cast->delta_dist_x;
+	pos = cast->pos_y;
 	if (cast->ray_dir_y < 0)
-		cast->side_dist_y = (cast->pos_y - cast->map_y) * cast->delta_dist_y;
+		cast->side_dist_y = (pos - cast->map_y) * cast->delta_dist_y;
 	else
-		cast->side_dist_y = (cast->map_y + 1.0 - cast->pos_y) * cast->delta_dist_y;
+		cast->side_dist_y = (cast->map_y + 1.0 - pos) * cast->delta_dist_y;
 }
 
-void init_raycaster(t_cast *cast, t_des *desc)
+void			init_raycaster(t_cast *cast, t_des *desc)
 {
 	cast->width = desc->x_res;
 	cast->height = desc->y_res;
@@ -51,11 +64,11 @@ void init_raycaster(t_cast *cast, t_des *desc)
 	cast->plane_y = cast->dir_x * -0.66;
 }
 
-void init_raycaster_loop(t_cast *cast, int x, int w)
+void			init_raycaster_loop(t_cast *cast, int x, int w)
 {
 	cast->camera_x = 2 * x / (double)w - 1;
 	cast->ray_dir_x = cast->dir_x + (cast->plane_x * cast->camera_x);
-	cast->ray_dir_y= cast->dir_y + (cast->plane_y * cast->camera_x);
+	cast->ray_dir_y = cast->dir_y + (cast->plane_y * cast->camera_x);
 	cast->map_x = (int)cast->pos_x;
 	cast->map_y = (int)cast->pos_y;
 	cast->delta_dist_x = set_delta_dist(cast->ray_dir_x, cast->ray_dir_y);
