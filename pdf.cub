@@ -3,7 +3,7 @@ R 1920 1080
 NO ./textures/brick.xpm
 EA ./textures/grass.xpm
 SO ./textures/stone.xpm
-WE ./textures/wood.xpm
+WE ./textures/eagle.xpm
 S ../specs/files/test.xpm
 
 F 2,237,0
