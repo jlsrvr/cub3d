@@ -13,9 +13,13 @@
 #ifndef ENGINE_H
 # define ENGINE_H
 # include "cub3d.h"
-# include <X11/X.h>
 # include <math.h>
-
+# define KEY_PRESS 2
+# define KEY_RELEASE 3
+# define CROSS_PRESS 33
+# define KEY_PRESS_MASK (1L<<0)
+# define KEY_RELEASE_MASK (1L<<1)
+# define MOUSE_CLICK_MASK (1L<<17)
 # define KEY_A 0x0061
 # define KEY_D 0x0064
 # define KEY_S 0x0073
