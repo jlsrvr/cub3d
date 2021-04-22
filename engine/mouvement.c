@@ -93,10 +93,7 @@ int			handle_keypress(int keysym, t_data *data)
 	cast = &data->cast;
 	move_speed = 0.5;
 	if (keysym == KEY_ESC)
-	{
-		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-		data->win_ptr = NULL;
-	}
+		exit_game(data);
 	else if (keysym == KEY_W)
 		move_forward_backward('F', cast, data->desc->map, move_speed);
 	else if (keysym == KEY_S)
