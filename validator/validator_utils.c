@@ -24,7 +24,7 @@ static void	assign_value(t_des *desc, char direction)
 		desc->dir_y = -1;
 }
 
-void	replace_spaces(t_des *desc)
+void		replace_spaces(t_des *desc)
 {
 	char	**map;
 	int		x_index;
