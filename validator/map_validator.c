@@ -110,7 +110,7 @@ static int	check_surrounding(char **map, int pos_x, int pos_y, int *pos_cnt)
 	return (0);
 }
 
-int	map_validator(t_des *desc)
+int			map_validator(t_des *desc)
 {
 	int	x_max;
 	int	y_max;
