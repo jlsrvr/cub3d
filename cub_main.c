@@ -12,7 +12,7 @@
 
 #include "cub3d.h"
 
-static void	free_description(t_des *description)
+static int	free_description(t_des *description)
 {
 	int	index;
 
@@ -31,6 +31,7 @@ static void	free_description(t_des *description)
 		free(description->map);
 	}
 	free(description);
+	return (1);
 }
 
 static int	pre_game_checks(char **av, int *fd, t_des **ptn_description)
@@ -52,7 +53,7 @@ static int	pre_game_checks(char **av, int *fd, t_des **ptn_description)
 	return (0);
 }
 
-int	main(int ac, char **av)
+int			main(int ac, char **av)
 {
 	t_des	*ptn_description;
 	int		ret;
@@ -68,11 +69,14 @@ int	main(int ac, char **av)
 	if (pre_game_checks(av, &fd, &ptn_description))
 	{
 		close(fd);
-		free_description(ptn_description);
-		return (1);
+		return (free_description(ptn_description));
 	}
 	close(fd);
-	cub_engine(ptn_description);
+	if (cub_engine(ptn_description))
+	{
+		ret = 1;
+		printf(RED"Error\n"RESET"Something went wrong in the game!");
+	}
 	free_description(ptn_description);
-	return (0);
+	return (ret);
 }
