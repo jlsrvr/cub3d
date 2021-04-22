@@ -38,7 +38,10 @@ static int	add_line(char ***map, char *line)
 		new_map[index] = (*map)[index];
 	new_line = ft_strdup(line);
 	if (!new_line)
+	{
+		free(new_map);
 		return (1);
+	}
 	new_map[index++] = new_line;
 	new_map[index] = NULL;
 	free(*map);
