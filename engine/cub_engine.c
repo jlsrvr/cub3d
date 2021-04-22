@@ -192,32 +192,37 @@ int render_ray(t_data *data, t_ray ray)
 	int y;
 	int tex_index;
 	double  wall_x;
+	int tex_x;
+	int tex_y;
+	double step;
+	int tex_height;
+	int tex_width;
+	double tex_pos;
+	int colour;
 
 	tex_index = define_texture(&data->cast);
+	tex_width = data->textures[tex_index].tex_width;
+	tex_height = data->textures[tex_index].tex_height;
+
 	if (data->cast.side == 0)
 		wall_x = data->cast.pos_y + data->cast.perp_wall_dist * data->cast.ray_dir_y;
 	else
 		wall_x = data->cast.pos_x + data->cast.perp_wall_dist * data->cast.ray_dir_x;
 	wall_x -= floor((wall_x));
-	int tex_x;
-	int tex_width;
-	tex_width = data->textures[tex_index].tex_width;
+
 	tex_x = (int)(wall_x * (double)tex_width);
 	if ((data->cast.side == 0 && data->cast.ray_dir_x > 0) || (data->cast.side == 1 && data->cast.ray_dir_x < 0))
 		tex_x = tex_width - tex_x - 1;
-	int tex_height;
-	tex_height = data->textures[tex_index].tex_height;
-	double step;
 	step = 1.0 * tex_height / data->cast.line_height;
-	double tex_pos;
 	tex_pos = (ray.y_start - data->cast.height / 2 + data->cast.line_height / 2) * step;
 	y = ray.y_start;
 	while (y < ray.y_end)
 	{
-		int tex_y;
 		tex_y = (int)tex_pos & (tex_height - 1);
 		tex_pos += step;
-		img_pix_put(&data->img, ray.x, y, data->textures[tex_index].img.addr[tex_height * tex_x + tex_y]);
+		colour = data->textures[tex_index].img.addr[tex_width * tex_y + tex_x];
+		printf("colour %x\n", colour);
+		img_pix_put(&data->img, ray.x, y, colour);
 		y++;
 	}
 	return (0);
