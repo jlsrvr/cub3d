@@ -83,8 +83,9 @@ typedef struct s_img
 typedef struct s_texture
 {
 	t_img img;
-	int tex_width;
-	int tex_height;
+	int *addr;
+	int width;
+	int height;
 } t_texture;
 
 typedef struct s_data

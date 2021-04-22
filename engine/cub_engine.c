@@ -201,8 +201,8 @@ int render_ray(t_data *data, t_ray ray)
 	int colour;
 
 	tex_index = define_texture(&data->cast);
-	tex_width = data->textures[tex_index].tex_width;
-	tex_height = data->textures[tex_index].tex_height;
+	tex_width = data->textures[tex_index].width;
+	tex_height = data->textures[tex_index].height;
 
 	if (data->cast.side == 0)
 		wall_x = data->cast.pos_y + data->cast.perp_wall_dist * data->cast.ray_dir_y;
@@ -220,8 +220,7 @@ int render_ray(t_data *data, t_ray ray)
 	{
 		tex_y = (int)tex_pos & (tex_height - 1);
 		tex_pos += step;
-		colour = data->textures[tex_index].img.addr[tex_width * tex_y + tex_x];
-		printf("colour %x\n", colour);
+		colour = data->textures[tex_index].addr[tex_width * tex_y + tex_x];
 		img_pix_put(&data->img, ray.x, y, colour);
 		y++;
 	}
@@ -270,17 +269,17 @@ int cub_engine(t_des *description)
 	data.img.mlx_img = mlx_new_image(data.mlx_ptr, WIN_X, WIN_Y);//protect this form being NULL
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp, &data.img.line_len, &data.img.endian);//protect this form being NULL
 
-	data.textures[0].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.desc->no_path, &data.textures[0].tex_width, &data.textures[0].tex_height);//protect this form being NULL
-	data.textures[0].img.addr = mlx_get_data_addr(data.textures[0].img.mlx_img, &data.textures[0].img.bpp, &data.textures[0].img.line_len, &data.textures[0].img.endian);//protect this form being NULL
+	data.textures[0].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.desc->no_path, &data.textures[0].width, &data.textures[0].height);//protect this form being NULL
+	data.textures[0].addr = (int *)mlx_get_data_addr(data.textures[0].img.mlx_img, &data.textures[0].img.bpp, &data.textures[0].img.line_len, &data.textures[0].img.endian);//protect this form being NULL
 
-	data.textures[1].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.desc->ea_path, &data.textures[1].tex_width, &data.textures[1].tex_height);//protect this form being NULL
-	data.textures[1].img.addr = mlx_get_data_addr(data.textures[1].img.mlx_img, &data.textures[1].img.bpp, &data.textures[1].img.line_len, &data.textures[1].img.endian);//protect this form being NULL
+	data.textures[1].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.desc->ea_path, &data.textures[1].width, &data.textures[1].height);//protect this form being NULL
+	data.textures[1].addr = (int *)mlx_get_data_addr(data.textures[1].img.mlx_img, &data.textures[1].img.bpp, &data.textures[1].img.line_len, &data.textures[1].img.endian);//protect this form being NULL
 
-	data.textures[2].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.desc->so_path, &data.textures[2].tex_width, &data.textures[2].tex_height);//protect this form being NULL
-	data.textures[2].img.addr = mlx_get_data_addr(data.textures[2].img.mlx_img, &data.textures[2].img.bpp, &data.textures[2].img.line_len, &data.textures[2].img.endian);//protect this form being NULL
+	data.textures[2].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.desc->so_path, &data.textures[2].width, &data.textures[2].height);//protect this form being NULL
+	data.textures[2].addr = (int *)mlx_get_data_addr(data.textures[2].img.mlx_img, &data.textures[2].img.bpp, &data.textures[2].img.line_len, &data.textures[2].img.endian);//protect this form being NULL
 
-	data.textures[3].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.desc->we_path, &data.textures[3].tex_width, &data.textures[3].tex_height);//protect this form being NULL
-	data.textures[3].img.addr = mlx_get_data_addr(data.textures[3].img.mlx_img, &data.textures[3].img.bpp, &data.textures[3].img.line_len, &data.textures[3].img.endian);//protect this form being NULL
+	data.textures[3].img.mlx_img = mlx_xpm_file_to_image(data.mlx_ptr, data.desc->we_path, &data.textures[3].width, &data.textures[3].height);//protect this form being NULL
+	data.textures[3].addr = (int *)mlx_get_data_addr(data.textures[3].img.mlx_img, &data.textures[3].img.bpp, &data.textures[3].img.line_len, &data.textures[3].img.endian);//protect this form being NULL
 
 	init_raycaster(&data.cast, description);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
