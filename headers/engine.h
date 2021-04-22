@@ -106,6 +106,6 @@ void init_raycaster_loop(t_cast *cast, int x, int w);
 void cast_ray(t_cast *cast, t_des *desc);
 void calculate_distance_to_wall(t_cast *cast);
 void define_line_start_end(t_cast *cast);
-
+void render_ray(t_data *data, t_ray ray);
 int	handle_keypress(int keysym, t_data *data);
 #endif
