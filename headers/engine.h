@@ -24,6 +24,15 @@
 # define LEFT_ARROW 0xff51
 # define RIGHT_ARROW 0xff53
 
+typedef struct 	s_transfer
+{
+	double	wall_x;
+	double	step;
+	double	tex_pos;
+	int		tex_x;
+
+} 				t_transfer;
+
 typedef struct s_ray
 {
         int x;
