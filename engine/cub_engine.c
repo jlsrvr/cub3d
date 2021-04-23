@@ -46,6 +46,7 @@ static int	render_view(t_data *data)
 	render_rect(&data->img,
 			(t_rect){0, 0, win_x, win_y / 2, data->desc->ceiling_c});
 	raycaster(data);
+	add_sprites(data);
 	mlx_put_image_to_window(data->mlx_ptr,
 			data->win_ptr, data->img.mlx_img, 0, 0);
 	return (0);

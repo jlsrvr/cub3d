@@ -16,6 +16,7 @@ SRC 		=	cub_main.c \
 				engine/engine_initialisers.c \
 				engine/mouvement.c \
 				engine/ray_rendering.c \
+				engine/sprites_rendering.c \
 				parser/colour_parser.c \
 				parser/cub_parser.c \
 				parser/map_parser.c \
