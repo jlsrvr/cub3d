@@ -42,9 +42,7 @@ static void	init_transfer(t_transfer *trans, t_cast cast,
 		trans->wall_x = cast.pos_x + cast.perp_wall_dist * cast.ray_dir_x;
 	trans->wall_x -= floor((trans->wall_x));
 	trans->tex_x = (int)(trans->wall_x * (double)texture.width);
-	if ((cast.side == 0 && cast.ray_dir_x > 0)
-			|| (cast.side == 1 && cast.ray_dir_x < 0))
-		trans->tex_x = texture.width - trans->tex_x - 1;
+	trans->tex_x = texture.width - trans->tex_x - 1;
 	trans->step = 1.0 * texture.height / cast.line_height;
 	pos = (ray_start - cast.height / 2 + cast.line_height / 2) * trans->step;
 	trans->tex_pos = pos;
@@ -66,7 +64,7 @@ void		render_ray(t_data *data, t_ray ray)
 	{
 		tex_y = (int)trans.tex_pos & (texture.height - 1);
 		trans.tex_pos += trans.step;
-		img_pix_put(&data->img, ray.x, y, \
-				texture.addr[texture.width * tex_y + trans.tex_x]);
+		img_pix_put(&data->img, ray.x, y,
+				texture.addr[texture.height * tex_y + trans.tex_x]);
 	}
 }
