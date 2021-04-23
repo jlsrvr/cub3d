@@ -62,7 +62,7 @@ void	cast_ray(t_cast *cast, t_des *desc)
 			cast->map_y += cast->step_y;
 			cast->side = 1;
 		}
-		if (desc->map[cast->map_x][cast->map_y] > '0')
+		if (desc->map[cast->map_x][cast->map_y] == '1')
 			cast->hit = 1;
 	}
 }
