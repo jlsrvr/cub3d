@@ -1,10 +1,10 @@
-R 1920 1080
+R 800 600
 
 NO ./textures/brick.xpm
-EA ./textures/grass.xpm
+EA ./textures/kandinsky.xpm
 SO ./textures/stone.xpm
-WE ./textures/eagle.xpm
-S ../specs/files/test.xpm
+WE ./textures/cat.xpm
+S ./textures/coin.xpm
 
 F 2,237,0
 C 2,237,245

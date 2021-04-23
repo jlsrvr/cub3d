@@ -55,14 +55,15 @@ static void	open_textures(t_data *data)
 {
 	t_texture	*texture;
 	int			index;
-	char		*paths[4];
+	char		*paths[5];
 
 	paths[0] = data->desc->no_path;
 	paths[1] = data->desc->ea_path;
 	paths[2] = data->desc->so_path;
 	paths[3] = data->desc->we_path;
+	paths[4] = data->desc->we_path;
 	index = -1;
-	while (++index < 4)
+	while (++index < 5)
 	{
 		texture = &data->textures[index];
 		texture->img.mlx_img = mlx_xpm_file_to_image(data->mlx_ptr,
@@ -81,10 +82,11 @@ static int	init_images(t_data *data)
 	if (!(data->img.mlx_img) || !(data->textures[0].img.mlx_img)
 			|| !(data->textures[1].img.mlx_img)
 			|| !(data->textures[2].img.mlx_img)
-			|| !(data->textures[3].img.mlx_img))
+			|| !(data->textures[3].img.mlx_img)
+			|| !(data->textures[4].img.mlx_img))
 		return (destroy_mlx_resources(data));
 	index = -1;
-	while (++index < 4)
+	while (++index < 5)
 	{
 		texture = &data->textures[index];
 		texture->addr = (int *)mlx_get_data_addr(texture->img.mlx_img,
