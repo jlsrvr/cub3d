@@ -109,7 +109,7 @@ typedef struct	s_data
 	t_img		img;
 	t_des		*desc;
 	t_texture	textures[5];
-
+	double		*wall_dist;
 }				t_data;
 
 int				destroy_mlx_resources(t_data *data);
