@@ -115,6 +115,7 @@ typedef struct	s_data
 int				destroy_mlx_resources(t_data *data);
 int				exit_game(t_data *data);
 int				handle_keypress(int keysym, t_data *data);
+void			add_sprites(t_data *data);
 void			calculate_distance_to_wall(t_cast *cast);
 void			cast_ray(t_cast *cast, t_des *desc);
 void			define_line_start_end(t_cast *cast);
