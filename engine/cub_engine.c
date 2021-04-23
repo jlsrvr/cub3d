@@ -108,7 +108,8 @@ int			cub_engine(t_des *description)
 		return (1);
 	data.win_ptr = mlx_new_window(data.mlx_ptr, data.desc->x_res,
 			data.desc->y_res, "Jules' Cub3D");
-	if (!(data.win_ptr))
+	data.wall_dist = malloc(sizeof(*data.wall_dist) * data.desc->x_res);
+	if (!(data.win_ptr) || !(data.wall_dist))
 		return (destroy_mlx_resources(&data));
 	if (init_images(&data))
 		return (1);

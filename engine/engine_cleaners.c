@@ -29,6 +29,8 @@ int			destroy_mlx_resources(t_data *data)
 	destroy_mlx_image((void **)&data->textures[4].img.mlx_img, data->mlx_ptr);
 	if (data->win_ptr)
 		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+	if (data->wall_dist)
+		free(data->wall_dist);
 	mlx_destroy_display(data->mlx_ptr);
 	free(data->mlx_ptr);
 	return (1);
