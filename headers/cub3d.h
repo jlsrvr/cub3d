@@ -27,22 +27,30 @@
 # define BLINK	"\e[5m"
 # define RESET  "\e[0m"
 
+typedef struct	s_sprite
+{
+	double pos_x;
+	double pos_y;
+}				t_sprite;
+
 typedef struct	s_description
 {
-	int		x_res;
-	int		y_res;
-	char	*no_path;
-	char	*ea_path;
-	char	*so_path;
-	char	*we_path;
-	char	*s_path;
-	int		floor_c;
-	int		ceiling_c;
-	char	**map;
-	double	pos_x;
-	double	pos_y;
-	double	dir_x;
-	double	dir_y;
+	int			x_res;
+	int			y_res;
+	char		*no_path;
+	char		*ea_path;
+	char		*so_path;
+	char		*we_path;
+	char		*s_path;
+	int			floor_c;
+	int			ceiling_c;
+	char		**map;
+	double		pos_x;
+	double		pos_y;
+	double		dir_x;
+	double		dir_y;
+	int			sprite_cnt;
+	t_sprite	*sprites;
 }				t_des;
 
 int				path_checker(char *path, char *extension);

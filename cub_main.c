@@ -30,6 +30,7 @@ static int	free_description(t_des *description)
 			free(description->map[index]);
 		free(description->map);
 	}
+	free(description->sprites);
 	free(description);
 	return (1);
 }

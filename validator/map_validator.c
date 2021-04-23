@@ -133,8 +133,7 @@ int			map_validator(t_des *desc)
 			if (check_surrounding(desc->map, x_index, y_index, &pos_cnt))
 				return (1);
 	}
-	if (pos_cnt != 1)
+	if (pos_cnt != 1 || replace_spaces(desc))
 		return (1);
-	replace_spaces(desc);
 	return (0);
 }
