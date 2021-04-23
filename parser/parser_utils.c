@@ -70,6 +70,8 @@ int		init_description(t_des **to_fill)
 	(*to_fill)->pos_y = 0;
 	(*to_fill)->dir_x = 0;
 	(*to_fill)->dir_y = 0;
+	(*to_fill)->sprite_cnt = 0;
+	(*to_fill)->sprites = NULL;
 	return (0);
 }
 

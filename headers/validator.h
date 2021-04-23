@@ -14,7 +14,7 @@
 # define VALIDATOR_H
 # include "cub3d.h"
 
-void	replace_spaces(t_des *desc);
+int		replace_spaces(t_des *desc);
 
 int		map_validator(t_des *description);
 int		textures_validator(t_des *description);
