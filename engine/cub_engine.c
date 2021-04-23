@@ -17,9 +17,9 @@ static int	raycaster(t_data *data)
 	t_cast	*cast;
 	int		x;
 
-	x = 0;
+	x = -1;
 	cast = &data->cast;
-	while (x < cast->width)
+	while (++x < cast->width)
 	{
 		init_raycaster_loop(cast, x, cast->width);
 		cast_ray(cast, data->desc);
@@ -27,7 +27,6 @@ static int	raycaster(t_data *data)
 		cast->line_height = (int)(cast->height / cast->perp_wall_dist);
 		define_line_start_end(cast);
 		render_ray(data, (t_ray){x, cast->draw_start, cast->draw_end});
-		x++;
 	}
 	return (0);
 }
