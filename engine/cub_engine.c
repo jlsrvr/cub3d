@@ -27,6 +27,7 @@ static int	raycaster(t_data *data)
 		cast->line_height = (int)(cast->height / cast->perp_wall_dist);
 		define_line_start_end(cast);
 		render_ray(data, (t_ray){x, cast->draw_start, cast->draw_end});
+		data->wall_dist[x] = cast->perp_wall_dist;
 	}
 	return (0);
 }
@@ -45,7 +46,8 @@ static int	render_view(t_data *data)
 	render_rect(&data->img,
 			(t_rect){0, 0, win_x, win_y / 2, data->desc->ceiling_c});
 	raycaster(data);
-	add_sprites(data);
+	if (add_sprites(data))
+		return (exit_game(data));
 	mlx_put_image_to_window(data->mlx_ptr,
 			data->win_ptr, data->img.mlx_img, 0, 0);
 	return (0);
