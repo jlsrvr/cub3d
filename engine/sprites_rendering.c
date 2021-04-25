@@ -1,23 +1,11 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   sprites_rendering.c                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jrivoire <jrivoire@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/23 11:29:09 by jrivoire          #+#    #+#             */
-/*   Updated: 2021/04/23 11:29:12 by jrivoire         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "engine.h"
 
-static void sort_sprites(int *order, double *dist, int amount)
+static void	sort_sprites(int *order, double *dist, int amount)
 {
-	int index;
-	int icomp;
-	int temp_order;
-	double temp_dist;
+	int		index;
+	int		icomp;
+	int		temp_order;
+	double	temp_dist;
 
 	index = -1;
 	while (++index < amount)
@@ -59,9 +47,11 @@ typedef struct	s_draw_sprite_vars
 
 }				t_draw_sprite_vars;
 
-int init_sprite_order(t_data *data, int **sprite_order, double **sprite_dist)
+int	init_sprite_order(t_data *data, int **sprite_order, double **sprite_dist)
 {
 	int index;
+	double pos_x;
+	double pos_y;
 	t_sprite sprite;
 
 	*sprite_order = malloc(sizeof(**sprite_order) * data->desc->sprite_cnt);
@@ -75,12 +65,47 @@ int init_sprite_order(t_data *data, int **sprite_order, double **sprite_dist)
 	index = -1;
 	while (++index < data->desc->sprite_cnt)
 	{
+		pos_x = data->cast.pos_x;
+		pos_y = data->cast.pos_y;
 		sprite = data->desc->sprites[index];
 		(*sprite_order)[index] = index;
-		(*sprite_dist)[index] = ((data->cast.pos_x - sprite.pos_x) * (data->cast.pos_x - sprite.pos_x) + (data->cast.pos_y - sprite.pos_y) * (data->cast.pos_y - sprite.pos_y));
+		(*sprite_dist)[index] = ((pos_x - sprite.pos_x) * (pos_x - sprite.pos_x)
+				+ (pos_y - sprite.pos_y) * (pos_y - sprite.pos_y));
 	}
 	sort_sprites(*sprite_order, *sprite_dist, data->desc->sprite_cnt);
 	return (0);
+}
+
+static  void sprite_init_calculations(t_data *data, t_draw_sprite_vars *draw_vars)
+{
+	t_cast cast;
+
+	cast = data->cast;
+	draw_vars->inv_det = 1.0 / (cast.plane_x * cast.dir_y - cast.dir_x * cast.plane_y);
+	draw_vars->transform_x = draw_vars->inv_det * (cast.dir_y * draw_vars->sprite_x - cast.dir_x * draw_vars->sprite_y);
+	draw_vars->transform_y = draw_vars->inv_det * (-cast.plane_y * draw_vars->sprite_x + cast.plane_x * draw_vars->sprite_y);
+	draw_vars->sprite_screen_x = (int)((cast.width / 2) * (1 + draw_vars->transform_x / draw_vars->transform_y));
+	draw_vars->sprite_height = abs((int)(cast.height / (draw_vars->transform_y)));
+	draw_vars->sprite_width = abs((int)(cast.height / (draw_vars->transform_y)));
+}
+
+static void define_start_end(t_draw_sprite_vars *draw_vars, t_data *data)
+{
+	t_cast cast;
+
+	cast = data->cast;
+	draw_vars->draw_start_y = -draw_vars->sprite_height / 2 + cast.height / 2;
+	if (draw_vars->draw_start_y < 0)
+		draw_vars->draw_start_y = 0;
+	draw_vars->draw_end_y = draw_vars->sprite_height / 2 + cast.height / 2;
+	if (draw_vars->draw_end_y >= cast.height)
+		draw_vars->draw_end_y = cast.height - 1;
+	draw_vars->draw_start_x = -draw_vars->sprite_width / 2 + draw_vars->sprite_screen_x;
+	if (draw_vars->draw_start_x < 0)
+		draw_vars->draw_start_x = 0;
+	draw_vars->draw_end_x = draw_vars->sprite_width / 2 + draw_vars->sprite_screen_x;
+	if (draw_vars->draw_end_x >= cast.width)
+		draw_vars->draw_end_x = cast.width - 1;
 }
 
 int	add_sprites(t_data *data)
@@ -97,24 +122,8 @@ int	add_sprites(t_data *data)
 	{
 		draw_vars.sprite_x = data->desc->sprites[sprite_order[index]].pos_x - data->cast.pos_x;
 		draw_vars.sprite_y = data->desc->sprites[sprite_order[index]].pos_y - data->cast.pos_y;
-		draw_vars.inv_det = 1.0 / (data->cast.plane_x * data->cast.dir_y - data->cast.dir_x * data->cast.plane_y);
-		draw_vars.transform_x = draw_vars.inv_det * (data->cast.dir_y * draw_vars.sprite_x - data->cast.dir_x * draw_vars.sprite_y);
-		draw_vars.transform_y = draw_vars.inv_det * (-data->cast.plane_y * draw_vars.sprite_x + data->cast.plane_x * draw_vars.sprite_y);
-		draw_vars.sprite_screen_x = (int)((data->cast.width / 2) * (1 + draw_vars.transform_x / draw_vars.transform_y));
-		draw_vars.sprite_height = abs((int)(data->cast.height / (draw_vars.transform_y)));
-		draw_vars.draw_start_y = -draw_vars.sprite_height / 2 + data->cast.height / 2;
-		if (draw_vars.draw_start_y < 0)
-			draw_vars.draw_start_y = 0;
-		draw_vars.draw_end_y = draw_vars.sprite_height / 2 + data->cast.height / 2;
-		if (draw_vars.draw_end_y >= data->cast.height)
-			draw_vars.draw_end_y = data->cast.height - 1;
-		draw_vars.sprite_width = abs((int)(data->cast.height / (draw_vars.transform_y)));
-		draw_vars.draw_start_x = -draw_vars.sprite_width / 2 + draw_vars.sprite_screen_x;
-		if (draw_vars.draw_start_x < 0)
-			draw_vars.draw_start_x = 0;
-		draw_vars.draw_end_x = draw_vars.sprite_width / 2 + draw_vars.sprite_screen_x;
-		if (draw_vars.draw_end_x >= data->cast.width)
-			draw_vars.draw_end_x = data->cast.width - 1;
+		sprite_init_calculations(data, &draw_vars);
+		define_start_end(&draw_vars, data);
 		draw_vars.stripe = draw_vars.draw_start_x - 1;
 		while (++draw_vars.stripe < draw_vars.draw_end_x)
 		{
