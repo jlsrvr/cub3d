@@ -17,9 +17,6 @@
 # define KEY_PRESS 2
 # define KEY_RELEASE 3
 # define CROSS_PRESS 33
-# define KEY_PRESS_MASK (1L<<0)
-# define KEY_RELEASE_MASK (1L<<1)
-# define MOUSE_CLICK_MASK (1L<<17)
 # define KEY_A 0x0061
 # define KEY_D 0x0064
 # define KEY_S 0x0073
@@ -132,7 +129,8 @@ int				add_sprites(t_data *data);
 int				destroy_mlx_resources(t_data *data);
 int				exit_game(t_data *data);
 int				handle_keypress(int keysym, t_data *data);
-int				init_sprite_order(t_data *data, int **sprite_order, double **sprite_dist);
+int				init_sprite_order(t_data *data, int **sprite_order,
+									double **sprite_dist);
 void			calculate_distance_to_wall(t_cast *cast);
 void			cast_ray(t_cast *cast, t_des *desc);
 void			define_line_start_end(t_cast *cast);
