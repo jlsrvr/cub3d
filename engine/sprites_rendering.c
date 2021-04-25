@@ -24,11 +24,10 @@ static void	sort_sprites(int *order, double *dist, int amount)
 	}
 }
 
-typedef struct	s_draw_sprite_vars
+typedef struct	s_sprite_vars
 {
 	double	sprite_x;
 	double	sprite_y;
-	double	inv_det;
 	double	transform_x;
 	double	transform_y;
 	int		sprite_screen_x;
@@ -38,14 +37,8 @@ typedef struct	s_draw_sprite_vars
 	int		draw_end_y;
 	int		draw_start_x;
 	int		draw_end_x;
-	int		stripe;
-	int		tex_x;
-	int		tex_y;
-	int		y;
-	int		d;
-	int		colour;
 
-}				t_draw_sprite_vars;
+}				t_sprite_vars;
 
 int	init_sprite_order(t_data *data, int **sprite_order, double **sprite_dist)
 {
@@ -76,36 +69,83 @@ int	init_sprite_order(t_data *data, int **sprite_order, double **sprite_dist)
 	return (0);
 }
 
-static  void sprite_init_calculations(t_data *data, t_draw_sprite_vars *draw_vars)
+static void	sprite_init_calculations(t_data *data,
+		t_sprite_vars *vars)
 {
-	t_cast cast;
+	t_cast	cast;
+	double	inv_det;
+	double	spt_x;
+	double	spt_y;
 
 	cast = data->cast;
-	draw_vars->inv_det = 1.0 / (cast.plane_x * cast.dir_y - cast.dir_x * cast.plane_y);
-	draw_vars->transform_x = draw_vars->inv_det * (cast.dir_y * draw_vars->sprite_x - cast.dir_x * draw_vars->sprite_y);
-	draw_vars->transform_y = draw_vars->inv_det * (-cast.plane_y * draw_vars->sprite_x + cast.plane_x * draw_vars->sprite_y);
-	draw_vars->sprite_screen_x = (int)((cast.width / 2) * (1 + draw_vars->transform_x / draw_vars->transform_y));
-	draw_vars->sprite_height = abs((int)(cast.height / (draw_vars->transform_y)));
-	draw_vars->sprite_width = abs((int)(cast.height / (draw_vars->transform_y)));
+	spt_x = vars->sprite_x;
+	spt_y = vars->sprite_y;
+	inv_det = 1.0 / (cast.plane_x * cast.dir_y - cast.dir_x * cast.plane_y);
+	vars->transform_x = inv_det * (cast.dir_y * spt_x - cast.dir_x * spt_y);
+	vars->transform_y = inv_det * (-cast.plane_y * spt_x +
+			cast.plane_x * spt_y);
+	vars->sprite_screen_x = (int)(
+			(cast.width / 2) * (1 + vars->transform_x / vars->transform_y));
+	vars->sprite_height = abs((int)(cast.height / (vars->transform_y)));
+	vars->sprite_width = abs((int)(cast.height / (vars->transform_y)));
 }
 
-static void define_start_end(t_draw_sprite_vars *draw_vars, t_data *data)
+static void	define_start_end(t_sprite_vars *vars, t_data *data)
 {
-	t_cast cast;
+	t_cast	cast;
+	int		s_height;
+	int		s_width;
 
+	s_height = vars->sprite_height;
+	s_width = vars->sprite_width;
 	cast = data->cast;
-	draw_vars->draw_start_y = -draw_vars->sprite_height / 2 + cast.height / 2;
-	if (draw_vars->draw_start_y < 0)
-		draw_vars->draw_start_y = 0;
-	draw_vars->draw_end_y = draw_vars->sprite_height / 2 + cast.height / 2;
-	if (draw_vars->draw_end_y >= cast.height)
-		draw_vars->draw_end_y = cast.height - 1;
-	draw_vars->draw_start_x = -draw_vars->sprite_width / 2 + draw_vars->sprite_screen_x;
-	if (draw_vars->draw_start_x < 0)
-		draw_vars->draw_start_x = 0;
-	draw_vars->draw_end_x = draw_vars->sprite_width / 2 + draw_vars->sprite_screen_x;
-	if (draw_vars->draw_end_x >= cast.width)
-		draw_vars->draw_end_x = cast.width - 1;
+	vars->draw_start_y = -s_height / 2 + cast.height / 2;
+	if (vars->draw_start_y < 0)
+		vars->draw_start_y = 0;
+	vars->draw_end_y = s_height / 2 + cast.height / 2;
+	if (vars->draw_end_y >= cast.height)
+		vars->draw_end_y = cast.height - 1;
+	vars->draw_start_x = -s_width / 2 + vars->sprite_screen_x;
+	if (vars->draw_start_x < 0)
+		vars->draw_start_x = 0;
+	vars->draw_end_x = s_width / 2 + vars->sprite_screen_x;
+	if (vars->draw_end_x >= cast.width)
+		vars->draw_end_x = cast.width - 1;
+}
+
+static void	img_stripe_put(t_data *data, int stripe, int tex_x, t_sprite_vars vars)
+{
+	int		tex_y;
+	int		y;
+	int		d;
+	int		colour;
+
+	y = vars.draw_start_y - 1;
+	while (++y < vars.draw_end_y)
+	{
+		d = y * 256 - data->cast.height *128 + vars.sprite_height * 128;
+		tex_y = ((d * data->textures[4].height) / vars.sprite_height) / 256;
+		colour = data->textures[4].addr[data->textures[4].width * tex_y + tex_x];
+		if ((colour & 0x00FFFFFF) != 0)
+			img_pix_put(&data->img, stripe, y, colour);
+	}
+
+}
+
+static void draw_sprite(t_sprite_vars vars, t_data *data)
+{
+	int	stripe;
+	int	tex_x;
+	int	s_width;
+
+	s_width = vars.sprite_width;
+	stripe = vars.draw_start_x - 1;
+	while (++stripe < vars.draw_end_x)
+	{
+		tex_x = (int)(256 * (stripe - (-s_width / 2 + vars.sprite_screen_x)) * data->textures[4].width / s_width) / 256;
+		if (vars.transform_y > 0 && stripe > 0 && stripe < data->cast.width && vars.transform_y < data->wall_dist[stripe])
+			img_stripe_put(data, stripe, tex_x, vars);
+	}
 }
 
 int	add_sprites(t_data *data)
@@ -113,34 +153,20 @@ int	add_sprites(t_data *data)
 	int index;
 	int	*sprite_order;
 	double *sprite_dist;
-	t_draw_sprite_vars draw_vars;
+	t_sprite_vars vars;
+	t_sprite sprite;
 
 	if (init_sprite_order(data, &sprite_order, &sprite_dist))
 		return (1);
 	index = -1;
 	while (++index < data->desc->sprite_cnt)
 	{
-		draw_vars.sprite_x = data->desc->sprites[sprite_order[index]].pos_x - data->cast.pos_x;
-		draw_vars.sprite_y = data->desc->sprites[sprite_order[index]].pos_y - data->cast.pos_y;
-		sprite_init_calculations(data, &draw_vars);
-		define_start_end(&draw_vars, data);
-		draw_vars.stripe = draw_vars.draw_start_x - 1;
-		while (++draw_vars.stripe < draw_vars.draw_end_x)
-		{
-			draw_vars.tex_x = (int)(256 * (draw_vars.stripe - (-draw_vars.sprite_width / 2 + draw_vars.sprite_screen_x)) * data->textures[4].width / draw_vars.sprite_width) / 256;
-			if (draw_vars.transform_y > 0 && draw_vars.stripe > 0 && draw_vars.stripe < data->cast.width && draw_vars.transform_y < data->wall_dist[draw_vars.stripe])
-			{
-				draw_vars.y = draw_vars.draw_start_y - 1;
-				while (++draw_vars.y < draw_vars.draw_end_y)
-				{
-					draw_vars.d = (draw_vars.y) * 256 - data->cast.height *128 + draw_vars.sprite_height * 128;
-					draw_vars.tex_y = ((draw_vars.d * data->textures[4].height) / draw_vars.sprite_height) / 256;
-					draw_vars.colour = data->textures[4].addr[data->textures[4].width * draw_vars.tex_y + draw_vars.tex_x];
-					if ((draw_vars.colour & 0x00FFFFFF) != 0)
-						img_pix_put(&data->img, draw_vars.stripe, draw_vars.y, draw_vars.colour);
-				}
-			}
-		}
+		sprite = data->desc->sprites[sprite_order[index]];
+		vars.sprite_x = sprite.pos_x - data->cast.pos_x;
+		vars.sprite_y = sprite.pos_y - data->cast.pos_y;
+		sprite_init_calculations(data, &vars);
+		define_start_end(&vars, data);
+		draw_sprite(vars, data);
 	}
 	free(sprite_order);
 	free(sprite_dist);
