@@ -116,9 +116,9 @@ int			cub_engine(t_des *description)
 	if (init_images(&data))
 		return (1);
 	init_raycaster(&data.cast, description);
-	mlx_hook(data.win_ptr, KEY_PRESS, KEY_PRESS_MASK, &handle_keypress, &data);
+	mlx_hook(data.win_ptr, KEY_PRESS, (1L<<0), &handle_keypress, &data);
 	mlx_loop_hook(data.mlx_ptr, &render_view, &data);
-	mlx_hook(data.win_ptr, CROSS_PRESS, MOUSE_CLICK_MASK, &exit_game, &data);
+	mlx_hook(data.win_ptr, CROSS_PRESS, (1L<<17), &exit_game, &data);
 	mlx_loop(data.mlx_ptr);
 	destroy_mlx_resources(&data);
 	return (0);
