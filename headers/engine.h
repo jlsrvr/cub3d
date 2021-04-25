@@ -28,6 +28,22 @@
 # define LEFT_ARROW 0xff51
 # define RIGHT_ARROW 0xff53
 
+typedef struct	s_sprite_vars
+{
+	double	sprite_x;
+	double	sprite_y;
+	double	transform_x;
+	double	transform_y;
+	int		sprite_screen_x;
+	int		sprite_height;
+	int		sprite_width;
+	int		draw_start_y;
+	int		draw_end_y;
+	int		draw_start_x;
+	int		draw_end_x;
+
+}				t_sprite_vars;
+
 typedef struct	s_transfer
 {
 	double	wall_x;
@@ -116,6 +132,7 @@ int				add_sprites(t_data *data);
 int				destroy_mlx_resources(t_data *data);
 int				exit_game(t_data *data);
 int				handle_keypress(int keysym, t_data *data);
+int				init_sprite_order(t_data *data, int **sprite_order, double **sprite_dist);
 void			calculate_distance_to_wall(t_cast *cast);
 void			cast_ray(t_cast *cast, t_des *desc);
 void			define_line_start_end(t_cast *cast);
