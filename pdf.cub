@@ -4,7 +4,7 @@ NO ./textures/brick.xpm
 EA ./textures/kandinsky.xpm
 SO ./textures/stone.xpm
 WE ./textures/cat.xpm
-S ./textures/coin.xpm
+S ./textures/barrel.xpm
 
 F 2,237,0
 C 2,237,245
