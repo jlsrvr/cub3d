@@ -88,7 +88,7 @@ int	add_sprites(t_data *data)
 		inv_det = 1.0 / (data->cast.plane_x * data->cast.dir_y - data->cast.dir_x * data->cast.plane_y);
 		transform_x = inv_det * (data->cast.dir_y * sprite_x - data->cast.dir_x * sprite_y);
 		transform_y = inv_det * (-data->cast.plane_y * sprite_x + data->cast.plane_x * sprite_y);
-		sprite_screen_x = (int)((data->cast.height / 2) * (1 + transform_x / transform_y));
+		sprite_screen_x = (int)((data->cast.width / 2) * (1 + transform_x / transform_y));
 		sprite_height = abs((int)(data->cast.height / (transform_y)));
 		draw_start_y = -sprite_height / 2 + data->cast.height / 2;
 		if (draw_start_y < 0)
@@ -112,9 +112,9 @@ int	add_sprites(t_data *data)
 				y = draw_start_y - 1;
 				while (++y < draw_end_y)
 				{
-					d = (y) * 256 - data->cast.height + sprite_height * 128;
+					d = (y) * 256 - data->cast.height *128 + sprite_height * 128;
 					tex_y = ((d * data->textures[4].height) / sprite_height) / 256;
-					colour = 0xff0000; //data->textures[4].addr[data->textures[4].width * tex_y + tex_x];
+					colour = data->textures[4].addr[data->textures[4].width * tex_y + tex_x];
 					if ((colour & 0x00FFFFFF) != 0)
 						img_pix_put(&data->img, stripe, y, colour);
 				}

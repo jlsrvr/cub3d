@@ -63,7 +63,7 @@ static void	open_textures(t_data *data)
 	paths[1] = data->desc->ea_path;
 	paths[2] = data->desc->so_path;
 	paths[3] = data->desc->we_path;
-	paths[4] = data->desc->we_path;
+	paths[4] = data->desc->s_path;
 	index = -1;
 	while (++index < 5)
 	{
