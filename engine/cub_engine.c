@@ -48,6 +48,8 @@ static int	render_view(t_data *data)
 	raycaster(data);
 	if (add_sprites(data))
 		return (exit_game(data));
+	//if (data->save)
+	//	return(save_image);
 	mlx_put_image_to_window(data->mlx_ptr,
 			data->win_ptr, data->img.mlx_img, 0, 0);
 	return (0);
@@ -109,14 +111,18 @@ int			cub_engine(t_des *description)
 	if (!(data.mlx_ptr))
 		return (1);
 	set_screen_resolution(data.mlx_ptr, &data.desc->x_res, &data.desc->y_res);
-	data.win_ptr = mlx_new_window(data.mlx_ptr, data.desc->x_res,
-			data.desc->y_res, "Jules' Cub3D");
 	data.wall_dist = malloc(sizeof(*data.wall_dist) * data.desc->x_res);
-	if (!(data.win_ptr) || !(data.wall_dist))
+	if (!(data.wall_dist))
 		return (destroy_mlx_resources(&data));
 	if (init_images(&data))
 		return (1);
 	init_raycaster(&data.cast, description);
+	//if (data->save)
+	//	return (render_view);
+	data.win_ptr = mlx_new_window(data.mlx_ptr, data.desc->x_res,
+			data.desc->y_res, "Jules' Cub3D");
+	if (!(data.win_ptr))
+		return (destroy_mlx_resources(&data));
 	mlx_hook(data.win_ptr, KEY_PRESS, (1L << 0), &handle_keypress, &data);
 	mlx_loop_hook(data.mlx_ptr, &render_view, &data);
 	mlx_hook(data.win_ptr, CROSS_PRESS, (1L << 17), &exit_game, &data);
