@@ -57,12 +57,12 @@ static int	pre_game_checks(int ac, char **av, int *fd, t_des **ptn_description)
 		if (ft_strncmp(av[2], "--save", 6))
 		{
 			printf(RED"Error\n"RESET);
-			printf("The second option should be --save not %s", av[1]);
+			printf("The second option should be --save not %s", av[2]);
 			return (1);
 		}
 		else
 		{
-			(*ptn_description)->save = 0;
+			(*ptn_description)->save = 1;
 		}
 	}
 	return (0);
