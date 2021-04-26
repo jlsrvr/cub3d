@@ -50,6 +50,7 @@ typedef struct	s_description
 	double		dir_x;
 	double		dir_y;
 	int			sprite_cnt;
+	int			save;
 	t_sprite	*sprites;
 }				t_des;
 

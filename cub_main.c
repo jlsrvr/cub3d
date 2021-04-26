@@ -35,7 +35,7 @@ static int	free_description(t_des *description)
 	return (1);
 }
 
-static int	pre_game_checks(char **av, int *fd, t_des **ptn_description)
+static int	pre_game_checks(int ac, char **av, int *fd, t_des **ptn_description)
 {
 	if (path_checker(av[1], ".cub"))
 	{
@@ -51,6 +51,20 @@ static int	pre_game_checks(char **av, int *fd, t_des **ptn_description)
 	}
 	else if (cub_validator(*ptn_description))
 		return (1);
+	(*ptn_description)->save = 0;
+	if (ac == 3)
+	{
+		if (ft_strncmp(av[2], "--save", 6))
+		{
+			printf(RED"Error\n"RESET);
+			printf("The second option should be --save not %s", av[1]);
+			return (1);
+		}
+		else
+		{
+			(*ptn_description)->save = 0;
+		}
+	}
 	return (0);
 }
 
@@ -67,7 +81,7 @@ int			main(int ac, char **av)
 		printf(RED"Error\n"RESET"A path to a scene description must be given!");
 		return (1);
 	}
-	if (pre_game_checks(av, &fd, &ptn_description))
+	if (pre_game_checks(ac, av, &fd, &ptn_description))
 	{
 		close(fd);
 		return (free_description(ptn_description));
