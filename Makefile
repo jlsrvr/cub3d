@@ -16,6 +16,7 @@ SRC 		=	cub_main.c \
 				engine/engine_initialisers.c \
 				engine/mouvement.c \
 				engine/ray_rendering.c \
+				engine/save.c \
 				engine/screen_size.c \
 				engine/sprites_ordering.c \
 				engine/sprites_rendering.c \

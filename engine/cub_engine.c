@@ -37,7 +37,7 @@ static int	render_view(t_data *data)
 	int win_x;
 	int win_y;
 
-	if (data->win_ptr == NULL)
+	if (data->desc->save == 0 && data->win_ptr == NULL)
 		return (1);
 	win_x = data->desc->x_res;
 	win_y = data->desc->y_res;
@@ -48,8 +48,8 @@ static int	render_view(t_data *data)
 	raycaster(data);
 	if (add_sprites(data))
 		return (exit_game(data));
-	//if (data->save)
-	//	return(save_image);
+	if (data->desc->save)
+		return(save_image(data));
 	mlx_put_image_to_window(data->mlx_ptr,
 			data->win_ptr, data->img.mlx_img, 0, 0);
 	return (0);
@@ -117,8 +117,8 @@ int			cub_engine(t_des *description)
 	if (init_images(&data))
 		return (1);
 	init_raycaster(&data.cast, description);
-	//if (data->save)
-	//	return (render_view);
+	if (data.desc->save)
+		return (render_view(&data));
 	data.win_ptr = mlx_new_window(data.mlx_ptr, data.desc->x_res,
 			data.desc->y_res, "Jules' Cub3D");
 	if (!(data.win_ptr))
