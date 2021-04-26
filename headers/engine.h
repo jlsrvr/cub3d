@@ -139,4 +139,5 @@ void			init_raycaster(t_cast *cast, t_des *desc);
 void			init_raycaster_loop(t_cast *cast, int x, int w);
 void			render_ray(t_data *data, t_ray ray);
 void			render_rect(t_img *img, t_rect rect);
+void			set_screen_resolution(void *mlx_ptr, int *x_res, int *y_res);
 #endif

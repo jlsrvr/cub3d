@@ -1,4 +1,4 @@
-R 800 600
+R 8000 6000
 
 NO ./textures/brick.xpm
 EA ./textures/kandinsky.xpm
