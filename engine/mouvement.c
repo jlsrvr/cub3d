@@ -91,7 +91,7 @@ int			handle_keypress(int keysym, t_data *data)
 	t_cast *cast;
 
 	cast = &data->cast;
-	move_speed = 0.5;
+	move_speed = 0.45;
 	if (keysym == KEY_ESC)
 		exit_game(data);
 	else if (keysym == KEY_W)
