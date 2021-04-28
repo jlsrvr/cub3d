@@ -11,6 +11,13 @@
 /* ************************************************************************** */
 
 #include "engine.h"
+#define KEY_A 0x0061
+#define KEY_D 0x0064
+#define KEY_S 0x0073
+#define KEY_W 0x0077
+#define KEY_ESC 0xff1b
+#define LEFT_ARROW 0xff51
+#define RIGHT_ARROW 0xff53
 
 static void	move_forward_backward(char dir, t_cast *cast,
 									char **map, double move_speed)

@@ -14,16 +14,6 @@
 # define ENGINE_H
 # include "cub3d.h"
 # include <math.h>
-# define KEY_PRESS 2
-# define KEY_RELEASE 3
-# define CROSS_PRESS 33
-# define KEY_A 0x0061
-# define KEY_D 0x0064
-# define KEY_S 0x0073
-# define KEY_W 0x0077
-# define KEY_ESC 0xff1b
-# define LEFT_ARROW 0xff51
-# define RIGHT_ARROW 0xff53
 
 typedef struct	s_sprite_vars
 {
