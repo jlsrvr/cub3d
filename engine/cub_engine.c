@@ -11,6 +11,9 @@
 /* ************************************************************************** */
 
 #include "engine.h"
+#define KEY_PRESS 2
+#define KEY_RELEASE 3
+#define CROSS_PRESS 33
 
 static int	raycaster(t_data *data)
 {
