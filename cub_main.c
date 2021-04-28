@@ -39,32 +39,27 @@ static int	pre_game_checks(int ac, char **av, int *fd, t_des **ptn_description)
 {
 	if (path_checker(av[1], ".cub"))
 	{
-		printf(RED"Error\n"RESET"%s : invalid", av[1]);
+		printf(RED"Error\n"RESET"%s : invalid\n", av[1]);
 		return (1);
 	}
 	*fd = open(av[1], O_RDONLY);
 	if (cub_parser(*fd, ptn_description))
 	{
 		printf(RED"Error\n"RESET);
-		printf("There is a problem with the scene given at %s", av[1]);
+		printf("There is a problem with the scene given at %s\n", av[1]);
 		return (1);
 	}
 	else if (cub_validator(*ptn_description))
 		return (1);
 	(*ptn_description)->save = 0;
-	if (ac == 3)
+	if (ac == 3 && (ft_strncmp(av[2], "--save", 6) || ft_strlen(av[2]) != 6))
 	{
-		if (ft_strncmp(av[2], "--save", 6))
-		{
-			printf(RED"Error\n"RESET);
-			printf("The second option should be --save not %s", av[2]);
-			return (1);
-		}
-		else
-		{
-			(*ptn_description)->save = 1;
-		}
+		printf(RED"Error\n"RESET);
+		printf("The second option should be --save not %s\n", av[2]);
+		return (1);
 	}
+	else if (ac == 3)
+		(*ptn_description)->save = 1;
 	return (0);
 }
 
@@ -76,9 +71,10 @@ int			main(int ac, char **av)
 
 	ptn_description = NULL;
 	ret = 0;
-	if (ac == 1)
+	if (ac == 1 || ac > 3)
 	{
-		printf(RED"Error\n"RESET"A path to a scene description must be given!");
+		printf(RED"Error\n"RESET);
+		printf("There must at least be a path and no more than 2 arguments\n");
 		return (1);
 	}
 	if (pre_game_checks(ac, av, &fd, &ptn_description))
@@ -89,7 +85,7 @@ int			main(int ac, char **av)
 	close(fd);
 	ret = cub_engine(ptn_description);
 	if (ret && ptn_description->save != 1)
-		printf(RED"Error\n"RESET"Something went wrong in the game!");
+		printf(RED"Error\n"RESET"Something went wrong in game build!\n");
 	free_description(ptn_description);
 	return (ret);
 }
