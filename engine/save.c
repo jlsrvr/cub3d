@@ -11,7 +11,7 @@ int save_image(t_data *data)
 	int fd;
 
 	data->win_ptr = NULL;
-	fd = open("./screenshot.bmp", O_WRONLY| O_CREAT | O_TRUNC);
+	fd = open("./screenshot.bmp", O_WRONLY | O_TRUNC | O_CREAT, 0755);
 	if (fd == -1)
 	{
 		printf(RED"Error\n"RESET"Unable to create or open file for screenshot");
