@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-static int	check_base(char *base)
+static int		check_base(char *base)
 {
 	int	index;
 	int	comp;
@@ -66,7 +66,7 @@ static	void	store_num(__uintmax_t nbr, char *num,
 	return ;
 }
 
-char	*ft_uitoa_base(__uintmax_t n, char *base)
+char			*ft_uitoa_base(__uintmax_t n, char *base)
 {
 	char				*num;
 	size_t				index;
