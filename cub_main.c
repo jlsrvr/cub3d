@@ -84,7 +84,7 @@ int			main(int ac, char **av)
 	}
 	close(fd);
 	ret = cub_engine(ptn_description);
-	if (ret && ptn_description->save != 1)
+	if (ret && ptn_description->save != 2)
 		printf(RED"Error\n"RESET"Something went wrong in game build!\n");
 	free_description(ptn_description);
 	return (ret);

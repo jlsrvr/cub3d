@@ -77,6 +77,7 @@ int			save_image(t_data *data)
 	int temp;
 	int padded_row_size;
 
+	data->desc->save = 2;
 	fd = open("./screenshot.bmp", O_WRONLY | O_TRUNC | O_CREAT, 0755);
 	if (fd == -1)
 	{
