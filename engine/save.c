@@ -66,6 +66,7 @@ static void	write_in_file(int fd, t_data *data, int padded_row_size)
 		pixel_offset = ((height - i) - 1) * unpadded_row_size;
 		write(fd, &data->img.addr[pixel_offset], padded_row_size);
 	}
+	close(fd);
 }
 
 int			save_image(t_data *data)
@@ -80,6 +81,7 @@ int			save_image(t_data *data)
 	fd = open("./screenshot.bmp", O_WRONLY | O_TRUNC | O_CREAT, 0755);
 	if (fd == -1)
 	{
+		destroy_mlx_resources(data);
 		printf(RED"Error\n"RESET"Unable to create or open file for screenshot");
 		return (1);
 	}
@@ -92,7 +94,6 @@ int			save_image(t_data *data)
 	write(fd, &temp, 4);
 	info_header(fd, data, width, height);
 	write_in_file(fd, data, padded_row_size);
-	close(fd);
 	destroy_mlx_resources(data);
 	return (0);
 }
