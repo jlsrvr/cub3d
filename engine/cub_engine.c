@@ -49,7 +49,7 @@ static int	render_view(t_data *data)
 	if (add_sprites(data))
 		return (exit_game(data));
 	if (data->desc->save)
-		return(save_image(data));
+		return (save_image(data));
 	mlx_put_image_to_window(data->mlx_ptr,
 			data->win_ptr, data->img.mlx_img, 0, 0);
 	return (0);
@@ -75,11 +75,13 @@ static void	open_textures(t_data *data)
 	}
 }
 
-static int	init_images(t_data *data)
+static int	init_data(t_data *data)
 {
 	int			index;
 	t_texture	*texture;
 
+	data->win_ptr = NULL;
+	data->wall_dist = NULL;
 	open_textures(data);
 	data->img.mlx_img = mlx_new_image(data->mlx_ptr, data->desc->x_res,
 										data->desc->y_res);
@@ -111,11 +113,11 @@ int			cub_engine(t_des *description)
 	if (!(data.mlx_ptr))
 		return (1);
 	set_screen_resolution(data.mlx_ptr, &data.desc->x_res, &data.desc->y_res);
+	if (init_data(&data))
+		return (1);
 	data.wall_dist = malloc(sizeof(*data.wall_dist) * data.desc->x_res);
 	if (!(data.wall_dist))
 		return (destroy_mlx_resources(&data));
-	if (init_images(&data))
-		return (1);
 	init_raycaster(&data.cast, description);
 	if (data.desc->save)
 		return (render_view(&data));
