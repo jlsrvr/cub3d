@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-static int	count_words(char const *s, char c)
+static int		count_words(char const *s, char c)
 {
 	size_t	counter;
 	size_t	index;
@@ -67,7 +67,7 @@ static	char	**protection(char **dest)
 	return (dest);
 }
 
-char	**ft_split(char const *s, char c)
+char			**ft_split(char const *s, char c)
 {
 	char	**dest;
 	size_t	index;

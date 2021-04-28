@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-static	int	len_num(int n)
+static	int		len_num(int n)
 {
 	size_t			len;
 	unsigned int	nbr;
@@ -48,7 +48,7 @@ static	void	store_num(unsigned int nbr, char *num, size_t *index)
 	return ;
 }
 
-char	*ft_itoa(int n)
+char			*ft_itoa(int n)
 {
 	char			*num;
 	size_t			index;

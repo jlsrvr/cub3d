@@ -22,7 +22,7 @@ static size_t	ft_strlen(char *str)
 	return (index);
 }
 
-static char	*add_to_line(char **line, char add)
+static char		*add_to_line(char **line, char add)
 {
 	char	*temp;
 	int		index;
@@ -47,7 +47,7 @@ static char	*add_to_line(char **line, char add)
 	return (*line);
 }
 
-static int	clean_return(int result, char **line)
+static int		clean_return(int result, char **line)
 {
 	if (result == 0 && ft_strlen(*line) == 0)
 	{
@@ -58,7 +58,7 @@ static int	clean_return(int result, char **line)
 	return (1);
 }
 
-int	get_next_line(int fd, char **line)
+int				get_next_line(int fd, char **line)
 {
 	char		buff[2];
 	char		*empty;

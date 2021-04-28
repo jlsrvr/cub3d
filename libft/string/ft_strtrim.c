@@ -22,7 +22,7 @@ static	int	ft_in_set(char c, char const *set)
 	return (0);
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+char		*ft_strtrim(char const *s1, char const *set)
 {
 	size_t			begin;
 	size_t			end;
