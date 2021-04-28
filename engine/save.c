@@ -68,7 +68,7 @@ static void	write_in_file(int fd, t_data *data, int padded_row_size)
 	}
 }
 
-int	save_image(t_data *data)
+int			save_image(t_data *data)
 {
 	int fd;
 	int height;
