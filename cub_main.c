@@ -87,11 +87,9 @@ int			main(int ac, char **av)
 		return (free_description(ptn_description));
 	}
 	close(fd);
-	if (cub_engine(ptn_description))
-	{
-		ret = 1;
+	ret = cub_engine(ptn_description);
+	if (ret && ptn_description->save != 1)
 		printf(RED"Error\n"RESET"Something went wrong in the game!");
-	}
 	free_description(ptn_description);
 	return (ret);
 }
