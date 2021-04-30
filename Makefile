@@ -42,12 +42,12 @@ all:		$(NAME)
 
 $(NAME):	make_lib make_mlx $(OBJS)
 			$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBS)
-			echo ".gitignore" > .gitignore
-			echo "minilibx-linux/test/mlx-test" >> .gitignore
-			echo $(NAME) >> .gitignore
-			find -type f -name "*.o" >> .gitignore
-			find -type f -name "*.a" >> .gitignore
-			sed -i -E 's/^\.\///' .gitignore
+			@echo ".gitignore" > .gitignore
+			@echo "minilibx-linux/test/mlx-test" >> .gitignore
+			@echo $(NAME) >> .gitignore
+			@find -type f -name "*.o" >> .gitignore
+			@find -type f -name "*.a" >> .gitignore
+			@sed -i -E 's/^\.\///' .gitignore
 
 make_lib:
 	@make libft.a -C ./libft/
