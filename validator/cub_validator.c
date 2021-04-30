@@ -16,12 +16,14 @@ int	cub_validator(t_des *description)
 {
 	if (textures_validator(description))
 	{
-		printf("Error\nAt least one of the texture paths is invalid");
+		printf(RED"Error\n"RESET);
+		printf("At least one of the texture paths is invalid\n");
 		return (1);
 	}
 	if (map_validator(description))
 	{
-		printf("Error\nThe map is invalid");
+		printf(RED"Error\n"RESET);
+		printf("The map is invalid\n");
 		return (1);
 	}
 	return (0);
