@@ -56,7 +56,7 @@ static int	check_split(char **numbers, int *first_index, int *last_index)
 				return (1);
 		}
 	}
-	if (num_cnt > 2 || numbers[(*last_index) + 1])
+	if (num_cnt < 2 || num_cnt > 2 || numbers[(*last_index) + 1])
 		return (1);
 	return (0);
 }
