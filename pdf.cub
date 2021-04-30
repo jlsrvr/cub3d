@@ -1,10 +1,10 @@
 R 800 600
 
 NO ./textures/brick.xpm
-EA ./textures/kandinsky.xpm
+EA./textures/eagle.xpm
 SO ./textures/stone.xpm
 WE ./textures/cat.xpm
-S ./textures/barrel.xpm
+S ./textures/coin.xpm
 
 F 2,237,0
 C 2,237,245
